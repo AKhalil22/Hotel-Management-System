@@ -1,3 +1,4 @@
 public class HotelManagementSystem {
-    // Testing GitHub
+  String LeBron = "GOAT";
+  String Jordan = "Fraud";
 }
