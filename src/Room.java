@@ -12,6 +12,10 @@ public class Room {
         this.amenities = new HashSet<>(); // Initialize an empty Hashset of amenities
     }
 
+    // Method to get room type
+    public int getRoomNumber() { return roomNumber; }
+    // Method to get room type (i.e. 2 bedroom, 1 bedroom)
+    public String getRoomType() { return roomType; }
     // Method to add an amenity
     public void addAmenity(Amenity amenity) {
         amenities.add(amenity);
@@ -26,5 +30,7 @@ public class Room {
     public boolean hasAmenity(Amenity amenity) {
         return amenities.contains(amenity);
     }
+
+
 
 }
