@@ -6,6 +6,8 @@ public class Customer {
     private String name;
     private Integer cardNumber;
     private Boolean loyaltyMember;
+    private String startDate;
+    private String endDate;
     private Set<Amenity> amenities;
 
     public Customer(String name, Integer cardNumber, Boolean loyaltyMember) {
@@ -40,16 +42,30 @@ public class Customer {
         this.loyaltyMember = loyaltyMember;
     }
 
+    public String getStartDate(){
+        return startDate;
+    }
+
+    public void setStartDate(String startDate){
+        this.startDate = startDate;
+    }
+
+    public String getEndDate(){
+        return endDate;
+    }
+
+    public void setEndDate(String endDate){
+        this.endDate = endDate;
+    }
+
     // Method to add an amenity
     public void addAmenity(Amenity amenity) {
         amenities.add(amenity);
     }
-
     // Method to remove an amenity
     public void removeAmenity(Amenity amenity) {
         amenities.remove(amenity);
     }
-
     // Method to check if a room has a specific amenity
     public boolean hasAmenity(Amenity amenity) {
         return amenities.contains(amenity);
