@@ -6,11 +6,11 @@ public class TestLauncher {
             @Override
             public void run() {
             new MainLoginPageGUI().setVisible(true);
-            new AdminLoginPageGUI().setVisible(true);
-            new GuestLoginPageGUI().setVisible(true);
-            new GuestHomePageGUI().setVisible(true);
-            new ListOfAvailableRoomsGUI().setVisible(true);
-            new CheckOutGUI().setVisible(true);
+            //new AdminLoginPageGUI().setVisible(true);
+            //new GuestLoginPageGUI().setVisible(true);
+            //new GuestHomePageGUI().setVisible(true);
+            //new ListOfAvailableRoomsGUI().setVisible(true);
+            //new CheckOutGUI().setVisible(true);
             }
         });
     }
