@@ -1,6 +1,3 @@
-import java.util.HashSet;
-import java.util.Set;
-
 public class Room {
     private int roomNumber;
     private String roomType; // e.g., "Single", "Double", "Suite"

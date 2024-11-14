@@ -66,7 +66,7 @@ public class Customer {
     public void removeAmenity(Amenity amenity) {
         amenities.remove(amenity);
     }
-    // Method to check if a room has a specific amenity
+    // Method to verify if a room has a specific amenity
     public boolean hasAmenity(Amenity amenity) {
         return amenities.contains(amenity);
     }
