@@ -3,6 +3,8 @@ public class Customer {
     private String name;
     private Integer cardNumber;
     private Boolean loyaltyMember;
+    private String startDate;
+    private String endDate;
 
     public Customer(String name, Integer cardNumber, Boolean loyaltyMember) {
         this.name = name;
@@ -34,4 +36,14 @@ public class Customer {
     public void setLoyaltyMember(Boolean loyaltyMember) {
         this.loyaltyMember = loyaltyMember;
     }
+
+    public String getStartDate { return startDate; }
+
+    public void setStartDate {this.startDate = startDate; }
+
+    public String getEndDate { return endDate; }
+
+    public void setEndDate {this.endDate = endDate; }
+
+
 }
