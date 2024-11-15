@@ -4,13 +4,13 @@ import java.util.Set;
 public class Customer {
     // Customer Parameters/Variables
     private String name;
-    private Integer cardNumber;
+    private String cardNumber;
     private Boolean loyaltyMember;
     private String startDate;
     private String endDate;
     private Set<Amenity> amenities;
 
-    public Customer(String name, Integer cardNumber, Boolean loyaltyMember) {
+    public Customer(String name, String cardNumber, Boolean loyaltyMember) {
         this.name = name;
         this.cardNumber = cardNumber;
         this.loyaltyMember = loyaltyMember;
@@ -26,11 +26,11 @@ public class Customer {
         this.name = name;
     }
 
-    public Integer getCardNumber() {
+    public String getCardNumber() {
         return cardNumber;
     }
 
-    public void setCardNumber(Integer cardNumber) {
+    public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
 
