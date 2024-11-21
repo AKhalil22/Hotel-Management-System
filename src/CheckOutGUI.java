@@ -4,15 +4,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CheckOutGUI extends JFrame {
     private double totalPrice;
     private JLabel totalPriceLabel;
 
-    public CheckOutGUI(String roomName, double roomPrice) {
+    public CheckOutGUI(String roomName, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
         super("Checkout");
         this.totalPrice = roomPrice;
+        String selectedRoomType = roomType;
+        String selectedCheckInDate = checkInDate;
+        String selectedCheckOutDate = checkOutDate;
         setSize(1000, 800);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -56,14 +60,16 @@ public class CheckOutGUI extends JFrame {
         amenitiesPanel.setBounds(150, 300, 200, 150);
 
         // Checkboxes for amenities
-        JCheckBox spaCheckbox = new JCheckBox("Spa (+$20)");
-        JCheckBox gymCheckbox = new JCheckBox("Gym (+$20)");
-        JCheckBox poolCheckbox = new JCheckBox("Pool (+$20)");
+        JCheckBox parkingCheckbox = new JCheckBox("Priority Parking (+$75)");
+        JCheckBox mealCardCheckbox = new JCheckBox("Meal Card (+$250)");
+        JCheckBox spaCheckbox = new JCheckBox("Spa (+$100)");
+        JCheckBox breakfastCheckbox = new JCheckBox("Breakfast Buffet (+50)");
 
         // Add checkboxes to panel
+        amenitiesPanel.add(breakfastCheckbox);
+        amenitiesPanel.add(parkingCheckbox);
         amenitiesPanel.add(spaCheckbox);
-        amenitiesPanel.add(gymCheckbox);
-        amenitiesPanel.add(poolCheckbox);
+        amenitiesPanel.add(mealCardCheckbox);
         add(amenitiesPanel);
 
         // Listener to update the total price in real-time
@@ -75,11 +81,14 @@ public class CheckOutGUI extends JFrame {
 
                 // Update total based on the checkbox state
                 if (source == spaCheckbox) {
-                    totalPrice += (stateChange == ItemEvent.SELECTED) ? 20 : -20;
-                } else if (source == gymCheckbox) {
-                    totalPrice += (stateChange == ItemEvent.SELECTED) ? 20 : -20;
-                } else if (source == poolCheckbox) {
-                    totalPrice += (stateChange == ItemEvent.SELECTED) ? 20 : -20;
+                    totalPrice += (stateChange == ItemEvent.SELECTED) ? 100 : -100;
+                } else if (source == parkingCheckbox) {
+                    totalPrice += (stateChange == ItemEvent.SELECTED) ? 75 : -75;
+                } else if (source == mealCardCheckbox) {
+                    totalPrice += (stateChange == ItemEvent.SELECTED) ? 250 : -250;
+                }
+                else if (source == breakfastCheckbox) {
+                    totalPrice += (stateChange == ItemEvent.SELECTED) ? 50 : -50;
                 }
 
                 // Update the total price label
@@ -88,8 +97,9 @@ public class CheckOutGUI extends JFrame {
         };
 
         spaCheckbox.addItemListener(itemListener);
-        gymCheckbox.addItemListener(itemListener);
-        poolCheckbox.addItemListener(itemListener);
+        parkingCheckbox.addItemListener(itemListener);
+        mealCardCheckbox.addItemListener(itemListener);
+        breakfastCheckbox.addItemListener(itemListener);
 
         // Customer Information Panel
         JPanel customerInfoPanel = new JPanel();
@@ -131,6 +141,24 @@ public class CheckOutGUI extends JFrame {
                 else {
                     Customer customer = new Customer(nameField.getText(), creditCardField.getText(), phoneNumberField.getText(), true);
                     Database.insertCustomer(customer.getName(), customer.getCardNumber(), customer.getPhoneNumber(), customer.getLoyaltyMember());
+
+
+                    List<String> listOfChosenAmenities = new ArrayList<>();
+                    if (spaCheckbox.isSelected()){
+                        listOfChosenAmenities.add("Spa");
+                    }
+                    if (parkingCheckbox.isSelected()){
+                        listOfChosenAmenities.add("Parking");
+                    }
+                    if (mealCardCheckbox.isSelected()){
+                        listOfChosenAmenities.add("MealCard");
+                    }
+                    if (breakfastCheckbox.isSelected()){
+                        listOfChosenAmenities.add("Breakfast");
+                    }
+
+                    Admin admin = new Admin();
+                    admin.createBooking(nameField.getText(), roomType, checkInDate, checkOutDate, String.join(",", listOfChosenAmenities));
                     JOptionPane.showMessageDialog(null, "Thank You For Your Purchase");
                     dispose();
                 }

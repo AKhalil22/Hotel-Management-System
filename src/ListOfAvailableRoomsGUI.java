@@ -7,11 +7,20 @@ import java.util.List;
 
 
 public class ListOfAvailableRoomsGUI extends JFrame {
+
+    private final String roomType;
+    private final String checkInDate;
+    private final String checkOutDate;
     private final List<Room> availableRooms;
-    public ListOfAvailableRoomsGUI(List<Room> availableRooms) {
+    public ListOfAvailableRoomsGUI(List<Room> availableRooms, String roomType, String checkInDate, String checkOutDate) {
         super("List of Available Rooms");
 
         this.availableRooms = availableRooms;
+
+        // Store the additional parameters
+        this.roomType = roomType;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(1000, 800);
@@ -20,6 +29,7 @@ public class ListOfAvailableRoomsGUI extends JFrame {
         setResizable(false);
         addGuiComponents();
     }
+
 
     private void addGuiComponents() {
         JPanel mainPanel = new JPanel();
@@ -62,7 +72,7 @@ public class ListOfAvailableRoomsGUI extends JFrame {
             roomBox.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    RoomInfoGUI roomInfo = new RoomInfoGUI("Room " + room.getRoomNumber(), room.getRoomPrice());
+                    RoomInfoGUI roomInfo = new RoomInfoGUI("Room " + room.getRoomNumber(), room.getRoomPrice(), roomType, checkInDate, checkOutDate);
                     roomInfo.setVisible(true);
                 }
 

@@ -4,18 +4,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class RoomInfoGUI extends JFrame {
-    public RoomInfoGUI(String roomName, double roomPrice) {
+    public RoomInfoGUI(String roomName, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
         super("Room "+roomName+" Info");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
         setSize(1000, 800);
         setLocationRelativeTo(null);
         setLayout(null);
         setResizable(false);
-        addGuiComponents(roomName, roomPrice);
+        addGuiComponents(roomName, roomPrice, roomType, checkInDate, checkOutDate);
     }
 
-    private void addGuiComponents(String roomName, double roomPrice) {
+    private void addGuiComponents(String roomName, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
         //Room Info Header
         JLabel roomInfoHeader = new JLabel("<html><b>"+roomName+"</b></html>", SwingConstants.CENTER);
         roomInfoHeader.setFont(new Font("Dialog",Font.PLAIN, 36));
@@ -31,7 +30,7 @@ public class RoomInfoGUI extends JFrame {
         checkoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new CheckOutGUI(roomName, roomPrice).setVisible(true);
+                new CheckOutGUI(roomName, roomPrice, roomType, checkInDate, checkOutDate).setVisible(true);
             }
         });
     }

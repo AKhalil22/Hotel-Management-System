@@ -14,6 +14,10 @@ public class GuestHomePageGUI extends JFrame {
 
     private final List<Room> availableRooms;
 
+    public List<Room> getAvailableRooms() {
+        return availableRooms;
+    }
+
     public GuestHomePageGUI(List<Room> availableRooms) {
         super("Home Page");
         this.availableRooms =  availableRooms;
@@ -24,6 +28,7 @@ public class GuestHomePageGUI extends JFrame {
         setLayout(null);
         setResizable(false);
         addGuiComponents();
+
 
     }
 
@@ -90,37 +95,37 @@ public class GuestHomePageGUI extends JFrame {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 // Get Check-In Date
                 Object checkInDateObj = checkInDatePicker.getModel().getValue();
                 SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
                 String checkInDate = "";
                 if (checkInDateObj != null) {
-                    checkInDate = sdf.format(checkInDateObj);//!!checkin date stored in this variable!!
+                    checkInDate = sdf.format(checkInDateObj); // Check-in date stored in this variable
                 }
 
                 // Get Check-Out Date
                 Object checkOutDateObj = checkOutDatePicker.getModel().getValue();
                 String checkOutDate = "";
                 if (checkOutDateObj != null) {
-                    checkOutDate = sdf.format(checkOutDateObj);//!!checkout date stored in this variable!!
+                    checkOutDate = sdf.format(checkOutDateObj); // Check-out date stored in this variable
                 }
 
+                // Get Room Type
+                String roomType = getRoomTypeWanted(typeOfRoomComboBox); // Retrieve the selected room type
 
-                //if both dates aren't selected
+                // Check if both dates are selected
                 if (checkInDate.isEmpty() || checkOutDate.isEmpty()) {
                     JOptionPane.showMessageDialog(GuestHomePageGUI.this,
                             "Please select both check-in and check-out dates.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-
-                else {
+                } else {
+                    // Pass additional parameters to ListOfAvailableRoomsGUI
                     dispose();
-                    new ListOfAvailableRoomsGUI(availableRooms).setVisible(true);
+                    new ListOfAvailableRoomsGUI(availableRooms, roomType, checkInDate, checkOutDate).setVisible(true);
                 }
-
-
             }
         });
+
+
 
 
     }
