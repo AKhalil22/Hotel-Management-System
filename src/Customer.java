@@ -5,14 +5,18 @@ public class Customer {
     // Customer Parameters/Variables
     private String name;
     private String cardNumber;
+    private String phoneNumber;
     private Boolean loyaltyMember;
     private String startDate;
     private String endDate;
     private Set<Amenity> amenities;
 
-    public Customer(String name, String cardNumber, Boolean loyaltyMember) {
+
+
+    public Customer(String name, String cardNumber, String phoneNumber, boolean loyaltyMember) {
         this.name = name;
         this.cardNumber = cardNumber;
+        this.phoneNumber = phoneNumber;
         this.loyaltyMember = loyaltyMember;
         this.amenities = new HashSet<>(); // Initialize an empty Hashset of amenities
     }
@@ -32,6 +36,14 @@ public class Customer {
 
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Boolean getLoyaltyMember() {

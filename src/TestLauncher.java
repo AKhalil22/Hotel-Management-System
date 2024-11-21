@@ -1,16 +1,15 @@
 import javax.swing.*;
+import java.util.List;
 
 public class TestLauncher {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-            new MainLoginPageGUI().setVisible(true);
-            new AdminLoginPageGUI().setVisible(true);
-            new GuestLoginPageGUI().setVisible(true);
-            new GuestHomePageGUI().setVisible(true);
-            new ListOfAvailableRoomsGUI().setVisible(true);
-            new CheckOutGUI().setVisible(true);
+                List<Room> availableRooms = Database.getAvailableRooms();
+                new LoginPageGUI(availableRooms).setVisible(true);
+//                new GuestHomePageGUI(availableRooms).setVisible(true);
+//                new AdminPageGUI().setVisible(true);
             }
         });
     }

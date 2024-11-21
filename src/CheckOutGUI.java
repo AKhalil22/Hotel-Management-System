@@ -1,16 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.List;
 
 public class CheckOutGUI extends JFrame {
-    private double roomPrice = 200;
-    private double totalPrice = roomPrice;
-
+    private double totalPrice;
     private JLabel totalPriceLabel;
 
-    public CheckOutGUI() {
+    public CheckOutGUI(String roomName, double roomPrice) {
         super("Checkout");
+        this.totalPrice = roomPrice;
         setSize(1000, 800);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -27,14 +29,14 @@ public class CheckOutGUI extends JFrame {
         separator.setBounds(50, 120, 900, 2); // Position and width of the line
         add(separator);
 
-        // Variables
-        int roomNumber = 100;
 
         // Room Number Label
-        JLabel roomNumberCheckout = new JLabel("Room " + roomNumber, SwingConstants.CENTER);
+        JLabel roomNumberCheckout = new JLabel("Room " + roomName, SwingConstants.CENTER);
         roomNumberCheckout.setFont(new Font("Dialog", Font.PLAIN, 20));
         roomNumberCheckout.setBounds(150, 200, 200, 50);
         add(roomNumberCheckout);
+
+
 
         // Room Price Label
         JLabel roomPriceCheckout = new JLabel("$" + roomPrice, SwingConstants.CENTER);
@@ -95,19 +97,19 @@ public class CheckOutGUI extends JFrame {
         customerInfoPanel.setBounds(150, 500, 700, 150);
 
         // Name Label and Text Field
-        JLabel nameLabel = new JLabel("Name:");
+        JLabel nameLabel = new JLabel("*Name:");
         JTextField nameField = new JTextField();
         customerInfoPanel.add(nameLabel);
         customerInfoPanel.add(nameField);
 
-        // Address Label and Text Field
-        JLabel addressLabel = new JLabel("Address:");
-        JTextField addressField = new JTextField();
-        customerInfoPanel.add(addressLabel);
-        customerInfoPanel.add(addressField);
+        // Phone # Label and Text Field
+        JLabel phoneNumberLabel = new JLabel("*Phone Number:");
+        JTextField phoneNumberField = new JTextField();
+        customerInfoPanel.add(phoneNumberLabel);
+        customerInfoPanel.add(phoneNumberField);
 
         // Credit Card Label and Text Field
-        JLabel creditCardLabel = new JLabel("Credit Card Number:");
+        JLabel creditCardLabel = new JLabel("*Credit Card Number:");
         JTextField creditCardField = new JTextField();
         customerInfoPanel.add(creditCardLabel);
         customerInfoPanel.add(creditCardField);
@@ -117,13 +119,26 @@ public class CheckOutGUI extends JFrame {
         payButton.setBounds(500, 675, 100, 50);
         add(payButton);
 
+        //Action Button for the pay button
+        payButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
+                if(nameField.getText().isEmpty()||creditCardField.getText().isEmpty()||phoneNumberField.getText().isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Fill Out All Parts");
+                }
+
+                else {
+                    Customer customer = new Customer(nameField.getText(), creditCardField.getText(), phoneNumberField.getText(), true);
+                    Database.insertCustomer(customer.getName(), customer.getCardNumber(), customer.getPhoneNumber(), customer.getLoyaltyMember());
+                    JOptionPane.showMessageDialog(null, "Thank You For Your Purchase");
+                    dispose();
+                }
+
+
+            }
+        });
         add(customerInfoPanel);
-
-
-
-
-
     }
 }
 

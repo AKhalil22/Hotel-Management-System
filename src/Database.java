@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
     // Path to database file (SQL connection)
@@ -110,6 +112,7 @@ public class Database {
             CREATE TABLE IF NOT EXISTS customers (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
+                phone_number TEXT NOT NULL,
                 card_number TEXT NOT NULL,
                 loyalty BOOLEAN
             );
@@ -124,13 +127,14 @@ public class Database {
     }
 
     // Insert/Set to customer table
-    public static void insertCustomer(String customerName, String cardNumber, boolean loyalty) {
-        String sql = "INSERT INTO customers(name, card_number, loyalty) VALUES(?,?,?)";
+    public static void insertCustomer(String customerName, String cardNumber, String phoneNumber, boolean loyalty) {
+        String sql = "INSERT INTO customers(name, card_number, phone_number, loyalty) VALUES(?,?,?,?)";
 
         try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
             preStatement.setString(1, customerName);
             preStatement.setString(2, cardNumber);
-            preStatement.setBoolean(3, loyalty);
+            preStatement.setString(3, phoneNumber);
+            preStatement.setBoolean(4, loyalty);
             preStatement.executeUpdate();
             System.out.println("Customers table updated successfully.");
         } catch (SQLException e) {
@@ -148,6 +152,7 @@ public class Database {
                 System.out.println("Customer ID: " + resultSet.getInt("id"));
                 System.out.println("Customer: " + resultSet.getString("name"));
                 System.out.println("Card Number: " + resultSet.getString("card_number"));
+                System.out.println("Phone Number: " + resultSet.getString("phone_number"));
                 System.out.println("Loyalty: " + resultSet.getBoolean("loyalty"));
                 System.out.println("-------------------------------------");
             }
@@ -160,13 +165,14 @@ public class Database {
     // Create/Initialize room table
     public static void createRoomTable() {
         String sql = """
-            CREATE TABLE IF NOT EXISTS rooms (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                room_number INTEGER NOT NULL,
-                room_type TEXT NOT NULL,
-                is_available BOOLEAN NOT NULL
-            );
-            """;
+        CREATE TABLE IF NOT EXISTS rooms (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            room_number INTEGER NOT NULL,
+            room_type TEXT NOT NULL,
+            room_price REAL NOT NULL,
+            is_available BOOLEAN NOT NULL
+        );
+        """;
 
         try (Connection connection = connect(); Statement statement = connection.createStatement()) {
             statement.execute(sql);
@@ -176,14 +182,16 @@ public class Database {
         }
     }
 
+
     // Insert/Set to room table
-    public static void insertRoom(Integer roomNumber, String roomType, boolean available) {
-        String sql = "INSERT INTO rooms(room_number, room_type, is_available) VALUES(?,?, ?)";
+    public static void insertRoom(Integer roomNumber, String roomType, double roomPrice, boolean isAvailable) {
+        String sql = "INSERT INTO rooms(room_number, room_type, room_price, is_available) VALUES(?,?,?,?)";
 
         try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
             preStatement.setInt(1, roomNumber);
             preStatement.setString(2, roomType);
-            preStatement.setBoolean(3, available);
+            preStatement.setDouble(3, roomPrice);
+            preStatement.setBoolean(4, isAvailable);
             preStatement.executeUpdate();
             System.out.println("Rooms table updated successfully.");
         } catch (SQLException e) {
@@ -191,23 +199,24 @@ public class Database {
         }
     }
 
+
     // Query/Get from room table
     public static void viewRooms() {
-        String sql = "SELECT * FROM rooms;";
+        String sql = "SELECT room_number, room_type, room_price, is_available FROM rooms;";
 
         try (Connection connection = connect(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
-                System.out.println("Room ID: " + resultSet.getInt("id"));
                 System.out.println("Room #: " + resultSet.getInt("room_number"));
                 System.out.println("Room Type: " + resultSet.getString("room_type"));
-                System.out.println("Available: " + resultSet.getBoolean("available"));
+                System.out.println("Price: $" + resultSet.getDouble("room_price"));
+                System.out.println("Available: " + (resultSet.getBoolean("is_available") ? "Yes" : "No"));
                 System.out.println("-------------------------------------");
             }
-
         } catch (SQLException e) {
             System.out.println("Viewing Room table failed: " + e.getMessage());
         }
     }
+
 
     private static int getCustomerId(String customerName) throws SQLException {
         String sql = "SELECT id FROM customers WHERE name = ?";
@@ -245,6 +254,28 @@ public class Database {
             }
         }
     }
+
+    public static List<Room> getAvailableRooms() {
+        List<Room> rooms = new ArrayList<>();
+
+        String sql = "SELECT room_number, room_type, room_price FROM rooms WHERE is_available = 1";
+
+        try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = preStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int roomNumber = resultSet.getInt("room_number");
+                String roomType = resultSet.getString("room_type");
+                double roomPrice = resultSet.getDouble("room_price");
+                rooms.add(new Room(roomNumber, roomType, roomPrice));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching available rooms: " + e.getMessage());
+        }
+
+        return rooms;
+    }
+
 
     // TODO: Optionally add delete methods
 

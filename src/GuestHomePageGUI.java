@@ -4,11 +4,19 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Properties;
 
 public class GuestHomePageGUI extends JFrame {
-    public GuestHomePageGUI() {
+
+    private final List<Room> availableRooms;
+
+    public GuestHomePageGUI(List<Room> availableRooms) {
         super("Home Page");
+        this.availableRooms =  availableRooms;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         setSize(1000, 800);
@@ -16,6 +24,7 @@ public class GuestHomePageGUI extends JFrame {
         setLayout(null);
         setResizable(false);
         addGuiComponents();
+
     }
 
     private void addGuiComponents() {
@@ -66,11 +75,11 @@ public class GuestHomePageGUI extends JFrame {
         numOfBedsLabel.setBounds(700, 250, 400, 50);
         add(numOfBedsLabel);
 
-        //Number of Beds Combo Box
-        String[] numOfBeds = {"Single", "Double", "Suite"};
-        JComboBox<String> numOfBedsComboBox = new JComboBox<>(numOfBeds);
-        numOfBedsComboBox.setBounds(700, 290, 125, 50);
-        add(numOfBedsComboBox);
+        //Type of Room Combo Box
+        String[] typeOfRoom = {"Single", "Double", "Suite"};
+        JComboBox<String> typeOfRoomComboBox = new JComboBox<>(typeOfRoom);
+        typeOfRoomComboBox.setBounds(700, 290, 125, 50);
+        add(typeOfRoomComboBox);
 
         //Search Button
         JButton searchButton = new JButton("Search");
@@ -78,8 +87,69 @@ public class GuestHomePageGUI extends JFrame {
         searchButton.setBounds(550, 350, 75, 50);
         add(searchButton);
 
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                // Get Check-In Date
+                Object checkInDateObj = checkInDatePicker.getModel().getValue();
+                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+                String checkInDate = "";
+                if (checkInDateObj != null) {
+                    checkInDate = sdf.format(checkInDateObj);//!!checkin date stored in this variable!!
+                }
+
+                // Get Check-Out Date
+                Object checkOutDateObj = checkOutDatePicker.getModel().getValue();
+                String checkOutDate = "";
+                if (checkOutDateObj != null) {
+                    checkOutDate = sdf.format(checkOutDateObj);//!!checkout date stored in this variable!!
+                }
+
+
+                //if both dates aren't selected
+                if (checkInDate.isEmpty() || checkOutDate.isEmpty()) {
+                    JOptionPane.showMessageDialog(GuestHomePageGUI.this,
+                            "Please select both check-in and check-out dates.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+                else {
+                    dispose();
+                    new ListOfAvailableRoomsGUI(availableRooms).setVisible(true);
+                }
+
+
+            }
+        });
+
 
     }
+
+    //method to get the type of room wanted
+    public String getRoomTypeWanted(JComboBox<String> typeOfRoomComboBox){
+        return (String) typeOfRoomComboBox.getSelectedItem();
+    }
+
+    //method to get the check in date
+    public String getCheckInDate(JDatePickerImpl checkInDatePicker) {
+        Object checkInDateObj = checkInDatePicker.getModel().getValue();
+        if (checkInDateObj != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+            return sdf.format(checkInDateObj);
+        }
+        return "";
+    }
+
+    //method to get the check out date
+    public String getCheckOutDate(JDatePickerImpl checkOutDatePicker) {
+        Object checkOutDateObj = checkOutDatePicker.getModel().getValue();
+        if (checkOutDateObj != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+            return sdf.format(checkOutDateObj);
+        }
+        return "";
+    }
+
 
 
 }
@@ -100,4 +170,5 @@ class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
         }
         return "";
     }
+
 }
