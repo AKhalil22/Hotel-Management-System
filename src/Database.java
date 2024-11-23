@@ -297,7 +297,9 @@ public class Database {
         }
     }
 
-    /*public static List<Room> getAvailableRooms() {
+
+
+    public static List<Room> getAvailableRooms() {
         List<Room> rooms = new ArrayList<>();
 
         String sql = "SELECT room_number, room_type, room_price FROM rooms WHERE is_available = 1";
@@ -316,7 +318,34 @@ public class Database {
         }
 
         return rooms;
-    }*/
+    }
+
+    public static boolean isRoomAvailable(int roomNumber, String checkInDate, String checkOutDate) {
+        // Query to check if the room is already booked for the requested dates
+        String sql = """
+        SELECT COUNT()
+        FROM bookings
+        WHERE room_number = ?
+        AND NOT (check_out_date <= ? OR check_in_date >= ?)
+    """;
+
+        try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
+            preStatement.setInt(1, roomNumber); // Set room number
+            preStatement.setString(2, checkInDate); // Set check-in date
+            preStatement.setString(3, checkOutDate); // Set check-out date
+
+            ResultSet resultSet = preStatement.executeQuery();
+            if (resultSet.next()) {
+                int count = resultSet.getInt(1); // Get the number of conflicting bookings
+                return count == 0; // If count is 0, the room is available
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking room availability: " + e.getMessage());
+        }
+
+        return false;
+    }
+
 
     // TODO: Optionally add delete methods
 

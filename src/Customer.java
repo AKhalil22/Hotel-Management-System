@@ -83,4 +83,24 @@ public class Customer {
         return amenities.contains(amenity);
     }
 
+    public void bookRoom(String checkInDate, String checkOutDate, int roomNumber, Set<Amenity> amenities) {
+        if (!Database.isRoomAvailable(roomNumber, checkInDate, checkOutDate)) {
+            return;
+        }
+
+        this.startDate = checkInDate;
+        this.endDate = checkOutDate;
+        this.amenities.clear(); // Clear any previously added amenities
+        this.amenities.addAll(amenities); // Add the new set of amenities
+
+        /* for testing
+        System.out.println("Booking confirmed for Customer: " + name);
+        System.out.println("Room Number: " + roomNumber);
+        System.out.println("Check-in Date: " + checkInDate);
+        System.out.println("Check-out Date: " + checkOutDate);
+        System.out.println("Amenities: " + this.amenities);
+
+         */
+    }
+
 }
