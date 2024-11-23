@@ -12,6 +12,13 @@ public class Database {
     Result := Acts like a return statement for query statements such as SELECT
      */
 
+    // Load all data into designated data structures
+    public static void loadDataStructures() {
+        loadRoomDataStructures();
+        loadCustomerDataStructures();
+        System.out.println("All data structures loaded successfully.");
+    }
+
     // One-Method Call to initialize all tables from HMS
     public static void initializeDatabase() {
         createCustomerTable();
@@ -182,7 +189,6 @@ public class Database {
         }
     }
 
-
     // Insert/Set to room table
     public static void insertRoom(Integer roomNumber, String roomType, double roomPrice, boolean isAvailable) {
         String sql = "INSERT INTO rooms(room_number, room_type, room_price, is_available) VALUES(?,?,?,?)";
@@ -198,7 +204,6 @@ public class Database {
             System.out.println("Inserting into Room table failed: " + e.getMessage());
         }
     }
-
 
     // Query/Get from room table
     public static void viewRooms() {
@@ -217,6 +222,43 @@ public class Database {
         }
     }
 
+    public static void loadRoomDataStructures() {
+        // SQL query to select all room data from the rooms table
+        String sql = "SELECT room_number, room_type, room_price, is_available FROM rooms;";
+
+        try (Connection connection = connect(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                // Create Room during runtime
+                Room room = new Room(resultSet.getInt("room_number"), resultSet.getString("room_type"), resultSet.getDouble("room_price"), resultSet.getBoolean("is_available"));
+                // Insert to room tree data structure
+                // TODO: HotelManagementSystem.roomTree.insert(HotelManagementSystem.roomTree.root, Integer.parseInt("room_number"));
+                // Insert to availableRooms ArrayList
+                if (room.isAvailable()) {
+                    HotelManagementSystem.availableRooms.add(room);
+                }
+                // Insert to map data structure
+                // TODO: HotelManagementSystem.map.put(room, room.getRoomNumber());
+            }
+        } catch (SQLException e) {
+            System.out.println("Viewing Room table failed: " + e.getMessage());
+        }
+    }
+
+    public static void loadCustomerDataStructures() {
+        // SQL query to select all customer data from the customers table
+        String sql = "SELECT id, name, card_number, phone_number, loyalty FROM customers;";
+
+        try (Connection connection = connect(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                // Create Customer during runtime
+                Customer customer = new Customer(resultSet.getString("name"), resultSet.getString("card_number"), resultSet.getString("phone_number"), resultSet.getBoolean("loyalty"));
+                // Insert to customers ArrayList
+                HotelManagementSystem.customers.add(customer);
+            }
+        } catch (SQLException e) {
+            System.out.println("Viewing Customer table failed: " + e.getMessage());
+        }
+    }
 
     private static int getCustomerId(String customerName) throws SQLException {
         String sql = "SELECT id FROM customers WHERE name = ?";
@@ -255,7 +297,7 @@ public class Database {
         }
     }
 
-    public static List<Room> getAvailableRooms() {
+    /*public static List<Room> getAvailableRooms() {
         List<Room> rooms = new ArrayList<>();
 
         String sql = "SELECT room_number, room_type, room_price FROM rooms WHERE is_available = 1";
@@ -267,15 +309,14 @@ public class Database {
                 int roomNumber = resultSet.getInt("room_number");
                 String roomType = resultSet.getString("room_type");
                 double roomPrice = resultSet.getDouble("room_price");
-                rooms.add(new Room(roomNumber, roomType, roomPrice));
+                rooms.add(new Room(roomNumber, roomType, roomPrice, true));
             }
         } catch (SQLException e) {
             System.out.println("Error fetching available rooms: " + e.getMessage());
         }
 
         return rooms;
-    }
-
+    }*/
 
     // TODO: Optionally add delete methods
 
