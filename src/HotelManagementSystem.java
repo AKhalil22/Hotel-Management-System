@@ -1,47 +1,56 @@
+import javax.swing.*;
 import java.sql.SQLException;
 import java.util.*;
 
 public class HotelManagementSystem {
 
+    // Store customers O(1) Lookup (Time Complexity)
+    static ArrayList<Customer> customers = new ArrayList<>();
+
+    // Key-Value Pair | Key = Room (Object) | Value = Price (Integer)
+    static TreeMap<Room, Integer> map = new TreeMap<>();
+
+    // Wait-list for booked rooms, Priority will be given to member holders
+    Queue<Customer> waitList = new PriorityQueue<>();
+
+    // Store rooms, O(1) Search/Lookup & O(1) Inserting/Storage
+    static BinarySearchTree roomTree = new BinarySearchTree();
+
+    // Store available rooms
+    static List<Room> availableRooms = new ArrayList<>();
+
     public static void main(String[] args) throws SQLException {
-        // Store customers O(1) Lookup (Time Complexity)
-        ArrayList<Customer> customers = new ArrayList<>();
-
-        // Key-Value Pair | Key = Room (Object) | Value = Price (Integer)
-        TreeMap<Room, Integer> map = new TreeMap<>();
-
-        // Wait-list for booked rooms, Priority will be given to member holders
-        Queue<Customer> waitList = new PriorityQueue<>();
-
-        // Store rooms, O(1) Search/Lookup & O(1) Inserting/Storage
-        BinarySearchTree roomTree = new BinarySearchTree();
 
         // Initialize Rooms
-        Room room1 = new Room(100, "Single", 100);
-        Room room2 = new Room(101, "Single", 100);
-        Room room3 = new Room(102, "Single", 100);
-        Room room4 = new Room(103, "Double", 200);
-        Room room5 = new Room(104, "Double", 200);
-        Room room6 = new Room(105, "Double",200);
-        Room room7 = new Room(106, "Suite",400);
-        Room room8 = new Room(107, "Suite",400);
-        Room room9 = new Room(108, "Suite",400);
+        /*
+        Room room1 = new Room(100, "Single", 100, true);
+        Room room2 = new Room(101, "Single", 100, true);
+        Room room3 = new Room(102, "Single", 100, true);
+        Room room4 = new Room(103, "Double", 200, true);
+        Room room5 = new Room(104, "Double", 200, true);
+        Room room6 = new Room(105, "Double",200, true);
+        Room room7 = new Room(106, "Suite",400, true);
+        Room room8 = new Room(107, "Suite",400, true);
+        Room room9 = new Room(108, "Suite",400, true);
+        */
 
         // Initialize customers
-        Customer Ammar = new Customer("AK", "1234567890123456","5163148991", Boolean.TRUE);
+        // Customer Ammar = new Customer("AK", "1234567890123456","5163148991", Boolean.TRUE);
 
 
         /*TODO: Integrate Binary Search Tree (BST)
            treeHouse.root = treeHouse.insert(treeHouse.root, room1);
         */
 
-        // Initialize the database & tables
+        // Initialize the database tables & data structures
         Database.initializeDatabase();
+        Database.loadDataStructures();
 
         //Add customers in database
-        Database.insertCustomer(Ammar.getName(), Ammar.getCardNumber(), Ammar.getPhoneNumber(), Ammar.getLoyaltyMember());
+        // Database.insertCustomer(Ammar.getName(), Ammar.getCardNumber(), Ammar.getPhoneNumber(), Ammar.getLoyaltyMember());
 
         // Add rooms in database
+        /*
         Database.insertRoom(room1.getRoomNumber(), room1.getRoomType(), room1.getRoomPrice(), room1.isAvailable());
         Database.insertRoom(room2.getRoomNumber(), room2.getRoomType(), room2.getRoomPrice(),room2.isAvailable());
         Database.insertRoom(room3.getRoomNumber(), room3.getRoomType(), room3.getRoomPrice(), room3.isAvailable());
@@ -51,11 +60,10 @@ public class HotelManagementSystem {
         Database.insertRoom(room7.getRoomNumber(), room7.getRoomType(), room7.getRoomPrice(), room7.isAvailable());
         Database.insertRoom(room8.getRoomNumber(), room8.getRoomType(), room8.getRoomPrice(), room8.isAvailable());
         Database.insertRoom(room9.getRoomNumber(), room9.getRoomType(), room9.getRoomPrice(), room9.isAvailable());
+         */
 
-
-        //Add bookings in database
-        Database.insertBooking(Ammar.getName(), room1.getRoomType(), "2022-01-01", "2022-01-03", "Pool, Gym");
-
+        // Add bookings in database
+        //Database.insertBooking(Ammar.getName(), room1.getRoomType(), "2022-01-01", "2022-01-03", "Pool, Gym");
 
         // View Customers
         Database.viewCustomers();
@@ -65,6 +73,20 @@ public class HotelManagementSystem {
 
         // View Bookings
         Database.viewBookings();
+
+        // GUI
+        /*
+        Guest: guest; password: 1234
+        Admin: admin; password: admin
+         */
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new GUILoginPage(availableRooms).setVisible(true);
+                // new GuestHomePageGUI(availableRooms).setVisible(true);
+                // new AdminPageGUI().setVisible(true);
+            }
+        });
 
     }
 
