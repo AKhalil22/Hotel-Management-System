@@ -10,15 +10,11 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Properties;
 
-public class GuestHomePageGUI extends JFrame {
+public class GUIGuestHomePage extends JFrame {
 
     private final List<Room> availableRooms;
 
-    public List<Room> getAvailableRooms() {
-        return availableRooms;
-    }
-
-    public GuestHomePageGUI(List<Room> availableRooms) {
+    public GUIGuestHomePage(List<Room> availableRooms) {
         super("Home Page");
         this.availableRooms =  availableRooms;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -28,8 +24,6 @@ public class GuestHomePageGUI extends JFrame {
         setLayout(null);
         setResizable(false);
         addGuiComponents();
-
-
     }
 
     private void addGuiComponents() {
@@ -115,12 +109,12 @@ public class GuestHomePageGUI extends JFrame {
 
                 // Check if both dates are selected
                 if (checkInDate.isEmpty() || checkOutDate.isEmpty()) {
-                    JOptionPane.showMessageDialog(GuestHomePageGUI.this,
+                    JOptionPane.showMessageDialog(GUIGuestHomePage.this,
                             "Please select both check-in and check-out dates.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     // Pass additional parameters to ListOfAvailableRoomsGUI
                     dispose();
-                    new ListOfAvailableRoomsGUI(availableRooms, roomType, checkInDate, checkOutDate).setVisible(true);
+                    new GUIListOfAvailableRooms(availableRooms, roomType, checkInDate, checkOutDate).setVisible(true);
                 }
             }
         });

@@ -7,11 +7,11 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CheckOutGUI extends JFrame {
+public class GUICheckOut extends JFrame {
     private double totalPrice;
     private JLabel totalPriceLabel;
 
-    public CheckOutGUI(String roomName, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
+    public GUICheckOut(String roomName, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
         super("Checkout");
         this.totalPrice = roomPrice;
         String selectedRoomType = roomType;
@@ -33,14 +33,11 @@ public class CheckOutGUI extends JFrame {
         separator.setBounds(50, 120, 900, 2); // Position and width of the line
         add(separator);
 
-
         // Room Number Label
         JLabel roomNumberCheckout = new JLabel("Room " + roomName, SwingConstants.CENTER);
         roomNumberCheckout.setFont(new Font("Dialog", Font.PLAIN, 20));
         roomNumberCheckout.setBounds(150, 200, 200, 50);
         add(roomNumberCheckout);
-
-
 
         // Room Price Label
         JLabel roomPriceCheckout = new JLabel("$" + roomPrice, SwingConstants.CENTER);
@@ -96,6 +93,7 @@ public class CheckOutGUI extends JFrame {
             }
         };
 
+        // Ammenety Checkboxes w/Event Listeners
         spaCheckbox.addItemListener(itemListener);
         parkingCheckbox.addItemListener(itemListener);
         mealCardCheckbox.addItemListener(itemListener);
@@ -134,7 +132,7 @@ public class CheckOutGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if(nameField.getText().isEmpty()||creditCardField.getText().isEmpty()||phoneNumberField.getText().isEmpty()){
+                if (nameField.getText().isEmpty()||creditCardField.getText().isEmpty()||phoneNumberField.getText().isEmpty()){
                     JOptionPane.showMessageDialog(null, "Fill Out All Parts");
                 }
 
@@ -144,6 +142,7 @@ public class CheckOutGUI extends JFrame {
 
 
                     List<String> listOfChosenAmenities = new ArrayList<>();
+
                     if (spaCheckbox.isSelected()){
                         listOfChosenAmenities.add("Spa");
                     }

@@ -3,8 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class RoomInfoGUI extends JFrame {
-    public RoomInfoGUI(String roomName, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
+public class GUIRoomInfo extends JFrame {
+    public GUIRoomInfo(String roomName, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
         super("Room "+roomName+" Info");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(1000, 800);
@@ -30,7 +30,7 @@ public class RoomInfoGUI extends JFrame {
         checkoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new CheckOutGUI(roomName, roomPrice, roomType, checkInDate, checkOutDate).setVisible(true);
+                new GUICheckOut(roomName, roomPrice, roomType, checkInDate, checkOutDate).setVisible(true);
             }
         });
     }

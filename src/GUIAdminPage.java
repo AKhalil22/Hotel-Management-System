@@ -1,8 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class AdminPageGUI extends JFrame {
-    public AdminPageGUI() {
+public class GUIAdminPage extends JFrame {
+    public GUIAdminPage() {
         super("Admin Page");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -45,6 +45,8 @@ public class AdminPageGUI extends JFrame {
         panel.add(customerTableLabel);
         return panel;
     }
+
+
 }
 
 /*

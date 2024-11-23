@@ -4,10 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class LoginPageGUI extends JFrame {
+public class GUILoginPage extends JFrame {
     private List<Room> availableRooms;
-    public LoginPageGUI(List<Room> availableRooms) {
-        super("Guest Login Page");
+    public GUILoginPage(List<Room> availableRooms) {
+        super("Login Page");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         this.availableRooms = availableRooms;
@@ -60,18 +60,17 @@ public class LoginPageGUI extends JFrame {
 
                 String passwordStr = new String(passwordField.getPassword());
 
-                if (usernameTextField.getText().equalsIgnoreCase("guest") && passwordStr.equals("1234")){
+                if (usernameTextField.getText().equalsIgnoreCase("guest") && passwordStr.equals("1234")) {
                     dispose();
-                    new GuestHomePageGUI(availableRooms).setVisible(true);
+                    new GUIGuestHomePage(availableRooms).setVisible(true);
                 }
 
-                else if(usernameTextField.getText().equalsIgnoreCase("admin") && passwordStr.equals("admin")){
-                    new AdminPageGUI().setVisible(true);
+                else if (usernameTextField.getText().equalsIgnoreCase("admin") && passwordStr.equals("admin")) {
+                    new GUIAdminPage().setVisible(true);
                 }
 
                 else {
-                    JOptionPane.showMessageDialog(LoginPageGUI.this,
-                            "Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(GUILoginPage.this,"Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
