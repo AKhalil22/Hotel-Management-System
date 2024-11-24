@@ -3,6 +3,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,11 +13,14 @@ public class GUIListOfAvailableRooms extends JFrame {
     private final String checkInDate;
     private final String checkOutDate;
     private final List<Room> availableRooms;
+    private final JComboBox<String> roomTypeComboBox;
 
-    public GUIListOfAvailableRooms(List<Room> availableRooms, String roomType, String checkInDate, String checkOutDate) {
+
+    public GUIListOfAvailableRooms(List<Room> availableRooms, JComboBox<String> roomTypeComboBox, String roomType, String checkInDate, String checkOutDate) {
         super("List of Available Rooms");
 
         this.availableRooms = availableRooms;
+        this.roomTypeComboBox = roomTypeComboBox;
 
         // Store the additional parameters
         this.roomType = roomType;
@@ -58,8 +62,20 @@ public class GUIListOfAvailableRooms extends JFrame {
         // Set the initial y position for the first room box
         int yPosition = 200;
 
-        // Iterate over the list of available rooms and add a box for each room
+        GUIGuestHomePage guiGuestHomePage = new GUIGuestHomePage(availableRooms);
+        String roomTypeSelected = guiGuestHomePage.getRoomTypeWanted(roomTypeComboBox);
+        List<Room> roomListWithSelectedRoomType = new ArrayList<>();
+
         for (Room room : availableRooms) {
+            if (room.getRoomType().equals(roomTypeSelected)) {
+                roomListWithSelectedRoomType.add(room);
+            }
+        }
+
+
+
+        // Iterate over the list of available rooms and add a box for each room
+        for (Room room : roomListWithSelectedRoomType) {
             // Create a panel for each room
             JPanel roomBox = new JPanel();
             roomBox.setLayout(null);
@@ -105,5 +121,6 @@ public class GUIListOfAvailableRooms extends JFrame {
             yPosition += 100;
         }
     }
+
 
 }
