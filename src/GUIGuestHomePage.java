@@ -114,7 +114,7 @@ public class GUIGuestHomePage extends JFrame {
                 } else {
                     // Pass additional parameters to ListOfAvailableRoomsGUI
                     dispose();
-                    new GUIListOfAvailableRooms(availableRooms, roomType, checkInDate, checkOutDate).setVisible(true);
+                    new GUIListOfAvailableRooms(availableRooms, typeOfRoomComboBox, roomType, checkInDate, checkOutDate).setVisible(true);
                 }
             }
         });

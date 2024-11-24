@@ -5,11 +5,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class GUICheckOut extends JFrame {
     private double totalPrice;
     private JLabel totalPriceLabel;
+
+    //CHANGE AMENTIES TO BE STORED INTO  HASHED SET
 
     public GUICheckOut(String roomName, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
         super("Checkout");
@@ -93,7 +96,7 @@ public class GUICheckOut extends JFrame {
             }
         };
 
-        // Ammenety Checkboxes w/Event Listeners
+        // Amenity Checkboxes w/Event Listeners
         spaCheckbox.addItemListener(itemListener);
         parkingCheckbox.addItemListener(itemListener);
         mealCardCheckbox.addItemListener(itemListener);
@@ -141,7 +144,7 @@ public class GUICheckOut extends JFrame {
                     Database.insertCustomer(customer.getName(), customer.getCardNumber(), customer.getPhoneNumber(), customer.getLoyaltyMember());
 
 
-                    List<String> listOfChosenAmenities = new ArrayList<>();
+                    HashSet<String> listOfChosenAmenities = new HashSet<>();
 
                     if (spaCheckbox.isSelected()){
                         listOfChosenAmenities.add("Spa");
