@@ -1,6 +1,6 @@
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Database {
     // Path to database file (SQL connection)
@@ -67,10 +67,10 @@ public class Database {
     }
 
     // Insert/Set to bookings table
-    public static void insertBooking(String customerName, String roomType, String checkInDate, String checkOutDate, String amenities) throws SQLException {
+    public static void insertBooking(String customerName, Integer roomNumber, String checkInDate, String checkOutDate, String amenities) throws SQLException {
         // Retrieve customer_id and room_id from customers and rooms tables
         int customerId = getCustomerId(customerName);
-        int roomId = getRoomId(roomType);
+        int roomId = getRoomId(roomNumber);
 
         String sql = "INSERT INTO bookings(customer_id, room_id, check_in_date, check_out_date, amenities) VALUES(?,?,?,?,?)";
 
@@ -222,6 +222,7 @@ public class Database {
         }
     }
 
+    // Load data structures utilizing rooms
     public static void loadRoomDataStructures() {
         // SQL query to select all room data from the rooms table
         String sql = "SELECT room_number, room_type, room_price, is_available FROM rooms;";
@@ -244,23 +245,55 @@ public class Database {
         }
     }
 
+    // Load data structures utilizing customers
     public static void loadCustomerDataStructures() {
-        // SQL query to select all customer data from the customers table
-        String sql = "SELECT id, name, card_number, phone_number, loyalty FROM customers;";
+        // SQL query to select all customers
+        String sqlCustomers = "SELECT id, name, card_number, phone_number, loyalty FROM customers;";
+        // SQL query to select all bookings
+        String sqlBookings = "SELECT customer_id, check_in_date, check_out_date FROM bookings;";
 
-        try (Connection connection = connect(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
-            while (resultSet.next()) {
-                // Create Customer during runtime
-                Customer customer = new Customer(resultSet.getString("name"), resultSet.getString("card_number"), resultSet.getString("phone_number"), resultSet.getBoolean("loyalty"));
-                // Insert to customers ArrayList
-                HotelManagementSystem.customers.add(customer);
+        try (Connection connection = connect()) {
+            // Load all customers
+            Map<Integer, Customer> customerMap = new HashMap<>();
+            try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sqlCustomers)) {
+                while (resultSet.next()) {
+                    // Create Customer instance
+                    Customer customer = new Customer(
+                            resultSet.getString("name"),
+                            resultSet.getString("card_number"),
+                            resultSet.getString("phone_number"),
+                            resultSet.getBoolean("loyalty")
+                    );
+
+                    // Store in ArrayList and map for quick lookup
+                    HotelManagementSystem.customers.add(customer);
+                    customerMap.put(resultSet.getInt("id"), customer);
+                }
             }
+
+            // Load all bookings and match them with customers
+            try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sqlBookings)) {
+                while (resultSet.next()) {
+                    int customerId = resultSet.getInt("customer_id");
+                    Customer customer = customerMap.get(customerId);
+                    if (customer != null) {
+                        // Update customer with booking info
+                        customer.setStartDate(resultSet.getString("check_in_date"));
+                        customer.setEndDate(resultSet.getString("check_out_date"));
+
+                        // Add customer to waitlist Priority Queue
+                        HotelManagementSystem.waitList.add(customer);
+                    }
+                }
+            }
+
         } catch (SQLException e) {
-            System.out.println("Viewing Customer table failed: " + e.getMessage());
+            System.out.println("Error loading customer data: " + e.getMessage());
         }
     }
 
-    private static int getCustomerId(String customerName) throws SQLException {
+    // Return customer ID from customer name
+    public static int getCustomerId(String customerName) throws SQLException {
         String sql = "SELECT id FROM customers WHERE name = ?";
 
         // Establish a connection and prepare the SQL statement
@@ -279,12 +312,13 @@ public class Database {
         }
     }
 
-    private static int getRoomId(String roomType) throws SQLException {
-        String sql = "SELECT id FROM rooms WHERE room_type = ?";
+    // Return room ID from room number
+    public static int getRoomId(Integer roomNumber) throws SQLException {
+        String sql = "SELECT id FROM rooms WHERE room_number = ?";
 
         // Prepare the SQL statement and set the parameter
         try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
-            preStatement.setString(1, roomType);
+            preStatement.setString(1, String.valueOf(roomNumber));
 
             // Execute the query and process the result set
             try (ResultSet resultSet = preStatement.executeQuery()) {
@@ -297,55 +331,59 @@ public class Database {
         }
     }
 
+    // Return booked room number from customer ID via bookings table
+    public static int getRoomNumber(Integer customerId) throws SQLException {
+    String sql = "SELECT room_id FROM bookings WHERE customer_id = ?";
 
+    try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
+        preStatement.setInt(1, customerId);
 
-    public static List<Room> getAvailableRooms() {
-        List<Room> rooms = new ArrayList<>();
-
-        String sql = "SELECT room_number, room_type, room_price FROM rooms WHERE is_available = 1";
-
-        try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
-            ResultSet resultSet = preStatement.executeQuery();
-
-            while (resultSet.next()) {
-                int roomNumber = resultSet.getInt("room_number");
-                String roomType = resultSet.getString("room_type");
-                double roomPrice = resultSet.getDouble("room_price");
-                rooms.add(new Room(roomNumber, roomType, roomPrice, true));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error fetching available rooms: " + e.getMessage());
-        }
-
-        return rooms;
-    }
-
-    public static boolean isRoomAvailable(int roomNumber, String checkInDate, String checkOutDate) {
-        // Query to check if the room is already booked for the requested dates
-        String sql = """
-        SELECT COUNT()
-        FROM bookings
-        WHERE room_number = ?
-        AND NOT (check_out_date <= ? OR check_in_date >= ?)
-    """;
-
-        try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
-            preStatement.setInt(1, roomNumber); // Set room number
-            preStatement.setString(2, checkInDate); // Set check-in date
-            preStatement.setString(3, checkOutDate); // Set check-out date
-
-            ResultSet resultSet = preStatement.executeQuery();
+        try (ResultSet resultSet = preStatement.executeQuery()) {
             if (resultSet.next()) {
-                int count = resultSet.getInt(1); // Get the number of conflicting bookings
-                return count == 0; // If count is 0, the room is available
+                int roomId = resultSet.getInt("room_id");
+                return getRoomNumberFromRoomTable(roomId);
+            } else {
+                throw new SQLException("No booking found for customer ID " + customerId);
             }
-        } catch (SQLException e) {
-            System.out.println("Error checking room availability: " + e.getMessage());
         }
+    }
+}
 
-        return false;
+    // Helper method to get the room number from the room table
+    private static int getRoomNumberFromRoomTable(int roomId) throws SQLException {
+    String sql = "SELECT room_number FROM rooms WHERE id = ?";
+
+    try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
+        preStatement.setInt(1, roomId);
+
+        try (ResultSet resultSet = preStatement.executeQuery()) {
+            if (resultSet.next()) {
+                return resultSet.getInt("room_number");
+            } else {
+                throw new SQLException("No room found with ID " + roomId);
+            }
+        }
+    }
+}
+
+    public static void updateRoomAvailability(Integer roomNumber, boolean isAvailable) throws SQLException {
+        String sql = "UPDATE rooms SET is_available = ? WHERE room_number = ?";
+
+        try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
+            preStatement.setBoolean(1, isAvailable);
+            preStatement.setInt(2, roomNumber);
+            preStatement.executeUpdate();
+        }
     }
 
+    public static void removeBooking(Integer customerId) throws SQLException {
+        String sql = "DELETE FROM bookings WHERE customer_id = ?";
+
+        try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
+            preStatement.setInt(1, customerId);
+            preStatement.executeUpdate();
+        }
+    }
 
     // TODO: Optionally add delete methods
 

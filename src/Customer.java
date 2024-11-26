@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,8 +11,6 @@ public class Customer {
     private String startDate;
     private String endDate;
     private Set<Amenity> amenities;
-
-
 
     public Customer(String name, String cardNumber, String phoneNumber, boolean loyaltyMember) {
         this.name = name;
@@ -81,26 +80,6 @@ public class Customer {
     // Method to verify if a room has a specific amenity
     public boolean hasAmenity(Amenity amenity) {
         return amenities.contains(amenity);
-    }
-
-    public void bookRoom(String checkInDate, String checkOutDate, int roomNumber, Set<Amenity> amenities) {
-        if (!Database.isRoomAvailable(roomNumber, checkInDate, checkOutDate)) {
-            return;
-        }
-
-        this.startDate = checkInDate;
-        this.endDate = checkOutDate;
-        this.amenities.clear(); // Clear any previously added amenities
-        this.amenities.addAll(amenities); // Add the new set of amenities
-
-        /* for testing
-        System.out.println("Booking confirmed for Customer: " + name);
-        System.out.println("Room Number: " + roomNumber);
-        System.out.println("Check-in Date: " + checkInDate);
-        System.out.println("Check-out Date: " + checkOutDate);
-        System.out.println("Amenities: " + this.amenities);
-
-         */
     }
 
 }
