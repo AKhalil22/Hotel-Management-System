@@ -93,11 +93,11 @@ public class HotelManagementSystem {
                 // new AdminPageGUI().setVisible(true);
 //                new GUIAdminPage().setVisible(true);
 
-                try {
-                    new GUIWaitlist(waitList);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+//                try {
+//                    new GUIWaitlist(waitList);
+//                } catch (SQLException e) {
+//                    throw new RuntimeException(e);
+//                }
             }
         });
 

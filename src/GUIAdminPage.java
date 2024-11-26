@@ -1,7 +1,9 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Queue;
 
 public class GUIAdminPage extends JFrame {
 
@@ -26,12 +28,30 @@ public class GUIAdminPage extends JFrame {
     }
 
     private JPanel createBookingsTablePanel() {
-        JPanel panel = new JPanel();
-        JLabel bookingsTableLabel = new JLabel("<html><b>Bookings Table</b></html>");
+        JPanel panel = new JPanel(new BorderLayout());
+
+        // Main heading label
+        JLabel bookingsTableLabel = new JLabel("<html><b>Bookings Table</b></html>", SwingConstants.CENTER);
         bookingsTableLabel.setFont(new Font("Dialog", Font.PLAIN, 24));
-        panel.add(bookingsTableLabel);
+        panel.add(bookingsTableLabel, BorderLayout.NORTH);
+
+        try {
+            Queue<Customer> customerBookings = HotelManagementSystem.waitList;
+            GUIWaitList2 waitListPanel = new GUIWaitList2(customerBookings);
+
+            // Embed the GUIWaitList2 panel into this tab
+            panel.add(waitListPanel, BorderLayout.CENTER);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JLabel errorLabel = new JLabel("Error loading wait list data", SwingConstants.CENTER);
+            panel.add(errorLabel, BorderLayout.CENTER);
+        }
+
         return panel;
     }
+
+
+
 
     private JPanel createRoomsTablePanel() {
         JPanel panel = new JPanel();
@@ -74,11 +94,11 @@ public class GUIAdminPage extends JFrame {
         //JTable
         DefaultTableModel tableModel = new DefaultTableModel(customerData, columnNames);
         JTable table = new JTable(tableModel);
-        table.setBounds(300, 150, 400, 400);
+        table.setBounds(150, 150, 700, 400);
 
         //Adding scroll pane into JTable
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(300, 150, 400, 400);
+        scrollPane.setBounds(150, 150, 700, 400);
         panel.add(scrollPane, BorderLayout.CENTER);
 
         // Add components to panel
