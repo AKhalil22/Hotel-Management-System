@@ -1,7 +1,10 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GUIAdminPage extends JFrame {
+
     public GUIAdminPage() {
         super("Admin Page");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -34,17 +37,57 @@ public class GUIAdminPage extends JFrame {
         JPanel panel = new JPanel();
         JLabel roomsTableLabel = new JLabel("<html><b>Rooms Table</b></html>");
         roomsTableLabel.setFont(new Font("Dialog", Font.PLAIN, 24));
+
+        //Define Column Name
+        String[] columnNames = {"Room Number", "Room Type", "Room Price", "Is Available"};
+
+        //Convert Tree to 2D Array
+        BinarySearchTree rooms = HotelManagementSystem.roomTree;
+
         panel.add(roomsTableLabel);
         return panel;
     }
 
     private JPanel createCustomerTablePanel() {
         JPanel panel = new JPanel();
-        JLabel customerTableLabel = new JLabel("<html><b>Customer Table</b></html>");
+        panel.setLayout(null);
+
+        // Main heading label
+        JLabel customerTableLabel = new JLabel("<html><b>Customer Table</b></html>", SwingConstants.CENTER);
         customerTableLabel.setFont(new Font("Dialog", Font.PLAIN, 24));
+        customerTableLabel.setBounds(300, 50, 400, 50);
+
+        //Defines column names
+        String[] columnNames = {"Name", "Card Number", "Phone Number", "Loyalty Member"};
+
+        //Convert ArrayList into 2d Array
+        ArrayList<Customer> customers = HotelManagementSystem.customers;
+        Object[][] customerData = new Object[customers.size()][4];
+        for (int i = 0; i<customers.size(); i++){
+            Customer customer = customers.get(i);
+            customerData[i][0] = customer.getName();
+            customerData[i][1] = customer.getCardNumber();
+            customerData[i][2] = customer.getPhoneNumber();
+            customerData[i][3] = customer.getLoyaltyMember() ? "Yes" : "No";
+        }
+
+        //JTable
+        DefaultTableModel tableModel = new DefaultTableModel(customerData, columnNames);
+        JTable table = new JTable(tableModel);
+        table.setBounds(300, 150, 400, 400);
+
+        //Adding scroll pane into JTable
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(300, 150, 400, 400);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        // Add components to panel
         panel.add(customerTableLabel);
+
         return panel;
     }
+
+
 
 
 }
