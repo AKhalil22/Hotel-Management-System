@@ -3,7 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GUIAdminCreateRoom extends JFrame {
-    private JPanel panel;
+    JPanel panel;
     private JTextField roomNumber;
     private JTextField roomType;
     private JTextField roomPrice;

@@ -5,7 +5,9 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class GUILoginPage extends JFrame {
+
     private List<Room> availableRooms;
+
     public GUILoginPage(List<Room> availableRooms) {
         super("Login Page");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -65,7 +67,7 @@ public class GUILoginPage extends JFrame {
                     new GUIGuestHomePage(availableRooms).setVisible(true);
                 }
 
-                else if (usernameTextField.getText().equalsIgnoreCase("admin") && passwordStr.equals("admin")) {
+                else if (Admin.verifyLogin(usernameTextField.getText(), passwordStr)) {
                     new GUIAdminPage().setVisible(true);
                 }
 

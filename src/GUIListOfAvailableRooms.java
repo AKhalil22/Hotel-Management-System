@@ -8,7 +8,6 @@ import java.util.List;
 
 
 public class GUIListOfAvailableRooms extends JFrame {
-
     private final String roomType;
     private final String checkInDate;
     private final String checkOutDate;
@@ -99,7 +98,7 @@ public class GUIListOfAvailableRooms extends JFrame {
             roomBox.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    GUIRoomInfo roomInfo = new GUIRoomInfo("Room " + room.getRoomNumber(), room.getRoomPrice(), roomType, checkInDate, checkOutDate);
+                    GUIRoomInfo roomInfo = new GUIRoomInfo(room.getRoomNumber(), room.getRoomPrice(), roomType, checkInDate, checkOutDate);
                     roomInfo.setVisible(true);
                 }
 

@@ -1,9 +1,11 @@
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,9 +16,10 @@ public class GUICheckOut extends JFrame {
 
     //CHANGE AMENTIES TO BE STORED INTO  HASHED SET
 
-    public GUICheckOut(String roomName, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
+    public GUICheckOut(int roomNumber, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
         super("Checkout");
         this.totalPrice = roomPrice;
+        int selectedRoomNumber = roomNumber;
         String selectedRoomType = roomType;
         String selectedCheckInDate = checkInDate;
         String selectedCheckOutDate = checkOutDate;
@@ -37,7 +40,7 @@ public class GUICheckOut extends JFrame {
         add(separator);
 
         // Room Number Label
-        JLabel roomNumberCheckout = new JLabel("Room " + roomName, SwingConstants.CENTER);
+        JLabel roomNumberCheckout = new JLabel("Room " + roomNumber, SwingConstants.CENTER);
         roomNumberCheckout.setFont(new Font("Dialog", Font.PLAIN, 20));
         roomNumberCheckout.setBounds(150, 200, 200, 50);
         add(roomNumberCheckout);
@@ -159,8 +162,13 @@ public class GUICheckOut extends JFrame {
                         listOfChosenAmenities.add("Breakfast");
                     }
 
-                    Admin admin = new Admin();
-                    admin.createBooking(nameField.getText(), roomType, checkInDate, checkOutDate, String.join(",", listOfChosenAmenities));
+                    //Admin admin = new Admin();
+                    System.out.println(roomNumber);
+                    try {
+                        Database.insertBooking(nameField.getText(), roomNumber, checkInDate, checkOutDate, String.join(",", listOfChosenAmenities));
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     JOptionPane.showMessageDialog(null, "Thank You For Your Purchase");
                     dispose();
                 }

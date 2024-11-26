@@ -15,8 +15,8 @@ public class GUIGuestHomePage extends JFrame {
     private final List<Room> availableRooms;
 
     public GUIGuestHomePage(List<Room> availableRooms) {
-        super("Home Page");
-        this.availableRooms =  availableRooms;
+        super("Guest Home Page");
+        this.availableRooms = availableRooms;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         setSize(1000, 800);
@@ -118,10 +118,6 @@ public class GUIGuestHomePage extends JFrame {
                 }
             }
         });
-
-
-
-
     }
 
     //method to get the type of room wanted
@@ -129,7 +125,7 @@ public class GUIGuestHomePage extends JFrame {
         return (String) typeOfRoomComboBox.getSelectedItem();
     }
 
-    //method to get the check in date
+    //method to get the checkin date
     public String getCheckInDate(JDatePickerImpl checkInDatePicker) {
         Object checkInDateObj = checkInDatePicker.getModel().getValue();
         if (checkInDateObj != null) {
@@ -139,7 +135,7 @@ public class GUIGuestHomePage extends JFrame {
         return "";
     }
 
-    //method to get the check out date
+    //method to get the checkout date
     public String getCheckOutDate(JDatePickerImpl checkOutDatePicker) {
         Object checkOutDateObj = checkOutDatePicker.getModel().getValue();
         if (checkOutDateObj != null) {
@@ -148,10 +144,8 @@ public class GUIGuestHomePage extends JFrame {
         }
         return "";
     }
-
-
-
 }
+
 class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
     private final String datePattern = "MM-dd-yyy";
     private final java.text.SimpleDateFormat dateFormatter = new java.text.SimpleDateFormat(datePattern);
