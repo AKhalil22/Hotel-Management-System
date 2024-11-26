@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="dataSourceStorageLocal" created-in="IU-243.21565.193">
-    <data-source name="identifier.sqlite" uuid="23b34baf-19c0-4f49-bb82-e6b9d5c7fb4a">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="SQLITE" />
-      <schema-mapping />
-    </data-source>
-    <data-source name="hotel" uuid="fec56bf6-9c4f-425c-8b87-d7888ea620dd">
+  <component name="dataSourceStorageLocal" created-in="IU-232.10335.12">
+    <data-source name="hotel" uuid="e5f5ad43-9c0a-4133-b3ed-2855535f7375">
       <database-info product="SQLite" version="3.45.1" jdbc-version="4.2" driver-name="SQLite JDBC" driver-version="3.45.1.0" dbms="SQLITE" exact-version="3.45.1" exact-driver-version="3.45">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>

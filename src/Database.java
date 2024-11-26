@@ -386,6 +386,21 @@ public class Database {
         }
     }
 
+    public static boolean isValidUsername(String username) {
+        String sql = "SELECT COUNT(*) AS count FROM customers WHERE name = ?";
+
+        try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
+            preStatement.setString(1, username);
+            try (ResultSet resultSet = preStatement.executeQuery()) {
+                return resultSet.getInt("count") > 0;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error validating username: " + e.getMessage());
+        }
+        return false;
+    }
+
+
     // TODO: Optionally add delete methods
 
 }
