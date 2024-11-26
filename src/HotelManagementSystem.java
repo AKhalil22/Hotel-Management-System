@@ -21,7 +21,6 @@ public class HotelManagementSystem {
 
     public static void main(String[] args) throws SQLException {
 
-
         // Initialize Rooms
         /*
         Room room1 = new Room(100, "Single", 100, true);
