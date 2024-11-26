@@ -15,7 +15,6 @@ public class GUIAdminPage extends JFrame {
         setResizable(false);
         setLayout(new BorderLayout());
         addGuiComponents();
-
     }
 
     private void addGuiComponents() {
