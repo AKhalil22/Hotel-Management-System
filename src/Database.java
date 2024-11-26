@@ -88,6 +88,7 @@ public class Database {
     }
 
 
+
     // Query/Get from bookings table
     public static void viewBookings() {
         String sql = """
