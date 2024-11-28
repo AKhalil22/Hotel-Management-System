@@ -9,7 +9,7 @@ public class Room {
         this.roomNumber = roomNumber;
         this.roomType = roomType;
         this.roomPrice = roomPrice;
-        this.available = true;
+        this.available = available;
     }
 
     // Method to get room type

@@ -50,9 +50,6 @@ public class GUIAdminPage extends JFrame {
         return panel;
     }
 
-
-
-
     private JPanel createRoomsTablePanel() {
         JPanel panel = new JPanel();
         JLabel roomsTableLabel = new JLabel("<html><b>Rooms Table</b></html>");

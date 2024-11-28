@@ -1,15 +1,24 @@
-class Node {
-    int key;
-    Node left, right;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Node(int item) {
-        key = item;
-        left = right = null;
+class RoomNode {
+    int roomKey; // Room Key = Room Number
+    String roomType;
+    double roomPrice;
+    boolean isAvailable;
+    RoomNode left, right;
+
+    public RoomNode(int roomKey, String roomType, double roomPrice, boolean isAvailable) {
+        this.roomKey = roomKey;
+        this.roomType = roomType;
+        this.roomPrice = roomPrice;
+        this.isAvailable = isAvailable;
+        this.left = this.right = null;
     }
 }
 
 public class BinarySearchTree {
-    public Node root;
+    RoomNode root;
 
     // Constructor (set the root node to null whenever we create a new Tree)
     public BinarySearchTree() {
@@ -17,72 +26,72 @@ public class BinarySearchTree {
     }
 
     // ** INSERTING NODES
-    Node insert(Node node, int key) {
+    RoomNode insert(RoomNode node, int roomKey, String roomType, double roomPrice, boolean isAvailable) {
         // If the tree is empty, return a new node
-        if (node == null) {
-            node = new Node(key);
+        if (root == null) {
+            root = new RoomNode(roomKey, roomType, roomPrice, isAvailable);
+            return root;
+        } else if (node == null) {
+            node = new RoomNode(roomKey, roomType, roomPrice, isAvailable);
             return node;
         }
 
         // Otherwise, recur down the tree
-        if (key < node.key)
-            node.left = insert(node.left, key);
-        else if (key > node.key)
-            node.right = insert(node.right, key);
+        if (roomKey < node.roomKey)
+            node.left = insert(node.left, roomKey, roomType, roomPrice, isAvailable);
+        else if (roomKey > node.roomKey)
+            node.right = insert(node.right, roomKey, roomType, roomPrice, isAvailable);
 
         // Return the (unchanged) node pointer
         return node;
     }
 
     // ** SEARCHING FOR A NODE
-    Node search(Node root, int key) {
+    RoomNode search(RoomNode root, int roomKey) {
         // Base Cases: root is null or key is present at root
-        if (root == null || root.key == key)
+        if (root == null || root.roomKey == roomKey)
             return root;
 
         // Key is greater than root's key
-        if (root.key < key)
-            return search(root.right, key);
+        if (root.roomKey < roomKey)
+            return search(root.right, roomKey);
 
         // Key is smaller than root's key
-        return search(root.left, key);
+        return search(root.left, roomKey);
     }
 
     // ** DELETING NODES
-    Node deleteNode(Node root, int key) {
+    RoomNode deleteRoom(RoomNode root, int roomKey) {
         // Base case
         if (root == null)
             return root;
 
-        // Recursive calls for ancestors of
-        // node to be deleted
-        if (root.key > key) {
-            root.left = deleteNode(root.left, key);
+        // Recursive calls for ancestors of nodes to be deleted
+        if (root.roomKey > roomKey) {
+            root.left = deleteRoom(root.left, roomKey);
             return root;
-        } else if (root.key < key) {
-            root.right = deleteNode(root.right, key);
+        } else if (root.roomKey < roomKey) {
+            root.right = deleteRoom(root.right, roomKey);
             return root;
         }
 
-        // We reach here when root is the node
-        // to be deleted.
-
+        // We reach here when root is the node to be deleted.
         // If one of the children is empty
         if (root.left == null) {
-            Node temp = root.right;
+            RoomNode temp = root.right;
             return temp;
         } else if (root.right == null) {
-            Node temp = root.left;
+            RoomNode temp = root.left;
             return temp;
         }
 
         // If both children exist
         else {
 
-            Node succParent = root;
+            RoomNode succParent = root;
 
             // Find successor
-            Node succ = root.right;
+            RoomNode succ = root.right;
             while (succ.left != null) {
                 succParent = succ;
                 succ = succ.left;
@@ -100,7 +109,7 @@ public class BinarySearchTree {
                 succParent.right = succ.right;
 
             // Copy Successor Data to root
-            root.key = succ.key;
+            root.roomKey = succ.roomKey;
 
             // Delete Successor and return root
             return root;
@@ -108,12 +117,14 @@ public class BinarySearchTree {
     }
 
     // ** TRAVERSING (in-order):
-    void inorder(Node root) {
+    List<Integer> inorder(RoomNode root, List<Integer> result) {
+        if (result == null) result = new ArrayList<>();
         if (root != null) {
-            inorder(root.left);
-            System.out.print(root.key + " ");
-            inorder(root.right);
+            inorder(root.left, result);
+            result.add(root.roomKey);
+            inorder(root.right, result);
         }
+        return result;
     }
 
 }

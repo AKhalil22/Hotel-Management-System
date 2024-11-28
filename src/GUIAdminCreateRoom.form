@@ -86,7 +86,7 @@
         </constraints>
         <properties>
           <selected value="true"/>
-          <text value="Is Available By Default"/>
+          <text value="(Available By Default)"/>
         </properties>
       </component>
     </children>
