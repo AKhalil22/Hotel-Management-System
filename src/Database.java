@@ -87,7 +87,6 @@ public class Database {
         }
     }
 
-
     // Query/Get from bookings table
     public static void viewBookings() {
         String sql = """
@@ -230,14 +229,17 @@ public class Database {
 
         try (Connection connection = connect(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
-                // Create Room during runtime
+                // Recreate Room during runtime
                 Room room = new Room(resultSet.getInt("room_number"), resultSet.getString("room_type"), resultSet.getDouble("room_price"), resultSet.getBoolean("is_available"));
-                // Insert to room tree data structure
-                // TODO: HotelManagementSystem.roomTree.insert(HotelManagementSystem.roomTree.root, Integer.parseInt("room_number"));
+
+                // Insert to room into Binary Search Tree
+                HotelManagementSystem.roomTree.insert(HotelManagementSystem.roomTree.root, room.getRoomNumber(), room.getRoomType(), room.getRoomPrice(), room.isAvailable());
+
                 // Insert to availableRooms ArrayList
                 if (room.isAvailable()) {
                     HotelManagementSystem.availableRooms.add(room);
                 }
+
                 // Insert to map data structure
                 // TODO: HotelManagementSystem.map.put(room, room.getRoomNumber());
             }
@@ -258,7 +260,7 @@ public class Database {
             Map<Integer, Customer> customerMap = new HashMap<>();
             try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sqlCustomers)) {
                 while (resultSet.next()) {
-                    // Create Customer instance
+                    // Recreate Customer during Runtime
                     Customer customer = new Customer(
                             resultSet.getString("name"),
                             resultSet.getString("card_number"),
@@ -367,6 +369,7 @@ public class Database {
     }
 }
 
+    // Update room availability after booking is accepted by admin
     public static void updateRoomAvailability(Integer roomNumber, boolean isAvailable) throws SQLException {
         String sql = "UPDATE rooms SET is_available = ? WHERE room_number = ?";
 
@@ -377,6 +380,7 @@ public class Database {
         }
     }
 
+    // Remove booking from bookings table if admin cancels
     public static void removeBooking(Integer customerId) throws SQLException {
         String sql = "DELETE FROM bookings WHERE customer_id = ?";
 
@@ -386,6 +390,17 @@ public class Database {
         }
     }
 
+    // Remove room from rooms table
+    public static void removeRoom(Integer roomId) throws SQLException {
+        String sql = "DELETE FROM rooms WHERE id = ?";
+
+        try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
+            preStatement.setInt(1, roomId);
+            preStatement.executeUpdate();
+        }
+    }
+
+    // Login Verification method for GUILoginPage
     public static boolean isValidUsername(String username) {
         String sql = "SELECT COUNT(*) AS count FROM customers WHERE name = ?";
 
@@ -399,8 +414,5 @@ public class Database {
         }
         return false;
     }
-
-
-    // TODO: Optionally add delete methods
 
 }

@@ -14,8 +14,6 @@ public class GUICheckOut extends JFrame {
     private double totalPrice;
     private JLabel totalPriceLabel;
 
-    //CHANGE AMENTIES TO BE STORED INTO  HASHED SET
-
     public GUICheckOut(int roomNumber, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
         super("Checkout");
         this.totalPrice = roomPrice;
@@ -59,14 +57,14 @@ public class GUICheckOut extends JFrame {
 
         // Amenities Panel
         JPanel amenitiesPanel = new JPanel();
-        amenitiesPanel.setLayout(new GridLayout(3, 1, 10, 10));
-        amenitiesPanel.setBounds(150, 300, 200, 150);
+        amenitiesPanel.setLayout(new GridLayout(2, 2, 10, 10));
+        amenitiesPanel.setBounds(300, 300, 300, 300);
 
         // Checkboxes for amenities
-        JCheckBox parkingCheckbox = new JCheckBox("Priority Parking (+$75)");
-        JCheckBox mealCardCheckbox = new JCheckBox("Meal Card (+$250)");
-        JCheckBox spaCheckbox = new JCheckBox("Spa (+$100)");
-        JCheckBox breakfastCheckbox = new JCheckBox("Breakfast Buffet (+50)");
+        JCheckBox parkingCheckbox = new JCheckBox("Priority Parking (+$" + Amenity.PRIORITY_PARKING.getPrice() + ")");
+        JCheckBox mealCardCheckbox = new JCheckBox("Meal Card (+$" + Amenity.MEAL_CARD.getPrice() + ")");
+        JCheckBox spaCheckbox = new JCheckBox("Spa (+$" + Amenity.SPA.getPrice() + ")");
+        JCheckBox breakfastCheckbox = new JCheckBox("Breakfast Buffet (+$" + Amenity.BREAKFAST_BUFFET.getPrice() + ")");
 
         // Add checkboxes to panel
         amenitiesPanel.add(breakfastCheckbox);
@@ -162,8 +160,7 @@ public class GUICheckOut extends JFrame {
                         listOfChosenAmenities.add("Breakfast");
                     }
 
-                    //Admin admin = new Admin();
-                    System.out.println(roomNumber);
+                    System.out.println("Room:" + roomNumber + "Has Been Booked.");
                     try {
                         Database.insertBooking(nameField.getText(), roomNumber, checkInDate, checkOutDate, String.join(",", listOfChosenAmenities));
                     } catch (SQLException ex) {
