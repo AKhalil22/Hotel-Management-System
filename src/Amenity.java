@@ -4,18 +4,6 @@ public enum Amenity {
     SPA(100.0),
     MEAL_CARD(250.0); // Access to free meals (local eateries)
 
-    /*
-    free amenities to be added to room info
-
-    wifi
-    pool
-    gym
-    room service7
-
-     */
-
-    // Add any other amenities here
-
     double price; // Optionally make "final" to prevent price changes
 
     // Setter (Enum)

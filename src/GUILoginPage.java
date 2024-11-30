@@ -65,13 +65,9 @@ public class GUILoginPage extends JFrame {
                 if (Database.isValidUsername(usernameTextField.getText()) && passwordStr.equals("guest")) {
                     dispose();
                     new GUIGuestHomePage(availableRooms).setVisible(true);
-                }
-
-                else if (usernameTextField.getText().equalsIgnoreCase("admin") && passwordStr.equals("admin")) {
+                } else if (usernameTextField.getText().equalsIgnoreCase("admin") && passwordStr.equals("admin")) {
                     new GUIAdminPage().setVisible(true);
-                }
-
-                else {
+                } else {
                     JOptionPane.showMessageDialog(GUILoginPage.this,"Invalid username or password.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }

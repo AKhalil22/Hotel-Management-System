@@ -10,14 +10,12 @@ public class Customer {
     private Boolean loyaltyMember;
     private String startDate;
     private String endDate;
-    private Set<Amenity> amenities;
 
     public Customer(String name, String cardNumber, String phoneNumber, boolean loyaltyMember) {
         this.name = name;
         this.cardNumber = cardNumber;
         this.phoneNumber = phoneNumber;
         this.loyaltyMember = loyaltyMember;
-        this.amenities = new HashSet<>(); // Initialize an empty Hashset of amenities
     }
 
     // Getter & Setters
@@ -67,19 +65,6 @@ public class Customer {
 
     public void setEndDate(String endDate){
         this.endDate = endDate;
-    }
-
-    // Method to add an amenity
-    public void addAmenity(Amenity amenity) {
-        amenities.add(amenity);
-    }
-    // Method to remove an amenity
-    public void removeAmenity(Amenity amenity) {
-        amenities.remove(amenity);
-    }
-    // Method to verify if a room has a specific amenity
-    public boolean hasAmenity(Amenity amenity) {
-        return amenities.contains(amenity);
     }
 
 }
