@@ -23,8 +23,7 @@ public class GUIAdminPage extends JFrame {
 
     private void addGuiComponents() {
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.add("Customer Table", createCustomerTablePanel());
-        tabbedPane.add("Customer Table 2", createCustomerTablePanel2());
+        tabbedPane.add("Customer Table", createCustomerTablePanel2());
         tabbedPane.add("Rooms Table", createRoomsTablePanel());
         tabbedPane.add("Bookings Table", createBookingsTablePanel());
         add(tabbedPane, BorderLayout.CENTER);
@@ -54,17 +53,20 @@ public class GUIAdminPage extends JFrame {
     }
 
     private JPanel createRoomsTablePanel() {
-        JPanel panel = new JPanel();
-        JLabel roomsTableLabel = new JLabel("<html><b>Rooms Table</b></html>");
+        JPanel panel = new JPanel(new BorderLayout());
+
+        // Main heading label
+        JLabel roomsTableLabel = new JLabel("<html><b>Rooms Table</b></html>", SwingConstants.CENTER);
         roomsTableLabel.setFont(new Font("Dialog", Font.PLAIN, 24));
+        panel.add(roomsTableLabel, BorderLayout.NORTH);
 
-        //Define Column Name
-        String[] columnNames = {"Room Number", "Room Type", "Room Price", "Is Available"};
+        GUIAdminRooms guiAdminRooms = new GUIAdminRooms();
 
-        //Convert Tree to 2D Array
-        BinarySearchTree rooms = HotelManagementSystem.roomTree;
+        Component[] components = guiAdminRooms.getContentPane().getComponents();
+        for (Component component : components) {
+            panel.add(component, BorderLayout.CENTER);
+        }
 
-        panel.add(roomsTableLabel);
         return panel;
     }
 
@@ -113,7 +115,7 @@ public class GUIAdminPage extends JFrame {
         panel.setLayout(null);
 
         // Main heading label
-        JLabel customerTableLabel = new JLabel("<html><b>Customer Table 2</b></html>", SwingConstants.CENTER);
+        JLabel customerTableLabel = new JLabel("<html><b>Customer Table</b></html>", SwingConstants.CENTER);
         customerTableLabel.setFont(new Font("Dialog", Font.PLAIN, 24));
         customerTableLabel.setBounds(300, 50, 400, 50);
 
@@ -158,16 +160,3 @@ public class GUIAdminPage extends JFrame {
     }
 
 }
-
-/*
-
-Customer Table
-for customer table be able to sort the whole table via their ID and loyalty
-and have search bar to find a certain name in the database
-
-Room Table
-Sort by room type and room number
-search bar for certain room number
-
-
- */

@@ -63,7 +63,6 @@ public class GUILoginPage extends JFrame {
                 String passwordStr = new String(passwordField.getPassword());
 
                 if (Database.isValidUsername(usernameTextField.getText()) && passwordStr.equals("guest")) {
-                    dispose();
                     new GUIGuestHomePage(availableRooms).setVisible(true);
                 } else if (usernameTextField.getText().equalsIgnoreCase("admin") && passwordStr.equals("admin")) {
                     new GUIAdminPage().setVisible(true);

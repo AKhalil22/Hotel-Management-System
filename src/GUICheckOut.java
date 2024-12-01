@@ -1,14 +1,10 @@
 import javax.swing.*;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 public class GUICheckOut extends JFrame {
     private double totalPrice;
@@ -17,163 +13,122 @@ public class GUICheckOut extends JFrame {
     public GUICheckOut(int roomNumber, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
         super("Checkout");
         this.totalPrice = roomPrice;
-        int selectedRoomNumber = roomNumber;
-        String selectedRoomType = roomType;
-        String selectedCheckInDate = checkInDate;
-        String selectedCheckOutDate = checkOutDate;
-        setSize(1000, 800);
+
+        // Frame setup
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(null);
 
-        // Checkout Header
+        // Main panel with GridBagLayout for flexibility
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        add(mainPanel);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.BOTH;
+
+        // Header
         JLabel checkOutHeader = new JLabel("<html><b>Checkout</b></html>", SwingConstants.CENTER);
-        checkOutHeader.setFont(new Font("Dialog", Font.PLAIN, 36));
-        checkOutHeader.setBounds(300, 50, 400, 50);
-        add(checkOutHeader);
+        checkOutHeader.setFont(new Font("Dialog", Font.BOLD, 32));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1;
+        gbc.weighty = 0.1;
+        mainPanel.add(checkOutHeader, gbc);
 
-        // Horizontal line (JSeparator)
-        JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
-        separator.setBounds(50, 120, 900, 2); // Position and width of the line
-        add(separator);
-
-        // Room Number Label
-        JLabel roomNumberCheckout = new JLabel("Room " + roomNumber, SwingConstants.CENTER);
-        roomNumberCheckout.setFont(new Font("Dialog", Font.PLAIN, 20));
-        roomNumberCheckout.setBounds(150, 200, 200, 50);
-        add(roomNumberCheckout);
-
-        // Room Price Label
-        JLabel roomPriceCheckout = new JLabel("$" + roomPrice, SwingConstants.CENTER);
-        roomPriceCheckout.setFont(new Font("Dialog", Font.PLAIN, 20));
-        roomPriceCheckout.setBounds(400, 200, 200, 50);
-        add(roomPriceCheckout);
-
-        // Total Price Label
+        // Room Details Panel
+        JPanel roomDetailsPanel = new JPanel(new GridLayout(1, 3, 20, 0));
+        roomDetailsPanel.add(new JLabel("Room: " + roomNumber, SwingConstants.CENTER));
+        roomDetailsPanel.add(new JLabel("Price: $" + roomPrice, SwingConstants.CENTER));
         totalPriceLabel = new JLabel("Total: $" + totalPrice, SwingConstants.CENTER);
-        totalPriceLabel.setFont(new Font("Dialog", Font.PLAIN, 20));
-        totalPriceLabel.setBounds(650, 200, 200, 50);
-        add(totalPriceLabel);
+        roomDetailsPanel.add(totalPriceLabel);
+        gbc.gridy = 1;
+        gbc.weighty = 0.1;
+        mainPanel.add(roomDetailsPanel, gbc);
 
         // Amenities Panel
-        JPanel amenitiesPanel = new JPanel();
-        amenitiesPanel.setLayout(new GridLayout(2, 2, 10, 10));
-        amenitiesPanel.setBounds(300, 300, 300, 300);
-
-        // Checkboxes for amenities
-        JCheckBox parkingCheckbox = new JCheckBox("Priority Parking (+$" + Amenity.PRIORITY_PARKING.getPrice() + ")");
-        JCheckBox mealCardCheckbox = new JCheckBox("Meal Card (+$" + Amenity.MEAL_CARD.getPrice() + ")");
-        JCheckBox spaCheckbox = new JCheckBox("Spa (+$" + Amenity.SPA.getPrice() + ")");
-        JCheckBox breakfastCheckbox = new JCheckBox("Breakfast Buffet (+$" + Amenity.BREAKFAST_BUFFET.getPrice() + ")");
-
-        // Add checkboxes to panel
+        JPanel amenitiesPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        amenitiesPanel.setBorder(BorderFactory.createTitledBorder("Select Amenities"));
+        JCheckBox parkingCheckbox = new JCheckBox("Priority Parking (+$75)");
+        JCheckBox mealCardCheckbox = new JCheckBox("Meal Card (+$250)");
+        JCheckBox spaCheckbox = new JCheckBox("Spa (+$100)");
+        JCheckBox breakfastCheckbox = new JCheckBox("Breakfast Buffet (+$50)");
         amenitiesPanel.add(breakfastCheckbox);
         amenitiesPanel.add(parkingCheckbox);
         amenitiesPanel.add(spaCheckbox);
         amenitiesPanel.add(mealCardCheckbox);
-        add(amenitiesPanel);
+        gbc.gridy = 2;
+        gbc.weighty = 0.3;
+        mainPanel.add(amenitiesPanel, gbc);
 
-        // Listener to update the total price in real-time
-        ItemListener itemListener = new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                int stateChange = e.getStateChange();
-                JCheckBox source = (JCheckBox) e.getSource();
+        // Amenities Listener
+        ItemListener itemListener = e -> {
+            JCheckBox source = (JCheckBox) e.getSource();
+            int change = (e.getStateChange() == ItemEvent.SELECTED) ? 1 : -1;
 
-                // Update total based on the checkbox state
-                if (source == spaCheckbox) {
-                    totalPrice += (stateChange == ItemEvent.SELECTED) ? 100 : -100;
-                } else if (source == parkingCheckbox) {
-                    totalPrice += (stateChange == ItemEvent.SELECTED) ? 75 : -75;
-                } else if (source == mealCardCheckbox) {
-                    totalPrice += (stateChange == ItemEvent.SELECTED) ? 250 : -250;
-                }
-                else if (source == breakfastCheckbox) {
-                    totalPrice += (stateChange == ItemEvent.SELECTED) ? 50 : -50;
-                }
+            if (source == spaCheckbox) totalPrice += change * 100;
+            else if (source == parkingCheckbox) totalPrice += change * 75;
+            else if (source == mealCardCheckbox) totalPrice += change * 250;
+            else if (source == breakfastCheckbox) totalPrice += change * 50;
 
-                // Update the total price label
-                totalPriceLabel.setText("Total: $" + totalPrice);
-            }
+            totalPriceLabel.setText("Total: $" + totalPrice);
         };
 
-        // Amenity Checkboxes w/Event Listeners
         spaCheckbox.addItemListener(itemListener);
         parkingCheckbox.addItemListener(itemListener);
         mealCardCheckbox.addItemListener(itemListener);
         breakfastCheckbox.addItemListener(itemListener);
 
         // Customer Information Panel
-        JPanel customerInfoPanel = new JPanel();
-        customerInfoPanel.setLayout(new GridLayout(3, 2, 10, 10));
-        customerInfoPanel.setBounds(150, 500, 700, 150);
-
-        // Name Label and Text Field
-        JLabel nameLabel = new JLabel("*Name:");
+        JPanel customerInfoPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        customerInfoPanel.setBorder(BorderFactory.createTitledBorder("Customer Information"));
+        customerInfoPanel.add(new JLabel("*Name:"));
         JTextField nameField = new JTextField();
-        customerInfoPanel.add(nameLabel);
         customerInfoPanel.add(nameField);
+        customerInfoPanel.add(new JLabel("*Phone Number:"));
+        JTextField phoneField = new JTextField();
+        customerInfoPanel.add(phoneField);
+        customerInfoPanel.add(new JLabel("*Credit Card:"));
+        JTextField cardField = new JTextField();
+        customerInfoPanel.add(cardField);
+        gbc.gridy = 3;
+        gbc.weighty = 0.3;
+        mainPanel.add(customerInfoPanel, gbc);
 
-        // Phone # Label and Text Field
-        JLabel phoneNumberLabel = new JLabel("*Phone Number:");
-        JTextField phoneNumberField = new JTextField();
-        customerInfoPanel.add(phoneNumberLabel);
-        customerInfoPanel.add(phoneNumberField);
-
-        // Credit Card Label and Text Field
-        JLabel creditCardLabel = new JLabel("*Credit Card Number:");
-        JTextField creditCardField = new JTextField();
-        customerInfoPanel.add(creditCardLabel);
-        customerInfoPanel.add(creditCardField);
-
-        //Pay Button
+        // Pay Button
         JButton payButton = new JButton("Pay");
-        payButton.setBounds(500, 675, 100, 50);
-        add(payButton);
+        gbc.gridy = 4;
+        gbc.weighty = 0.2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        mainPanel.add(payButton, gbc);
 
-        //Action Button for the pay button
-        payButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        // Pay Button Action
+        payButton.addActionListener(e -> {
+            if (nameField.getText().isEmpty() || phoneField.getText().isEmpty() || cardField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please fill out all required fields.");
+            } else {
+                Customer customer = new Customer(nameField.getText(), cardField.getText(), phoneField.getText(), true);
+                Database.insertCustomer(customer.getName(), customer.getCardNumber(), customer.getPhoneNumber(), customer.getLoyaltyMember());
 
-                if (nameField.getText().isEmpty()||creditCardField.getText().isEmpty()||phoneNumberField.getText().isEmpty()){
-                    JOptionPane.showMessageDialog(null, "Fill Out All Parts");
+                HashSet<String> selectedAmenities = new HashSet<>();
+                if (spaCheckbox.isSelected()) selectedAmenities.add("Spa");
+                if (parkingCheckbox.isSelected()) selectedAmenities.add("Parking");
+                if (mealCardCheckbox.isSelected()) selectedAmenities.add("Meal Card");
+                if (breakfastCheckbox.isSelected()) selectedAmenities.add("Breakfast");
+
+                try {
+                    Database.insertBooking(customer.getName(), roomNumber, checkInDate, checkOutDate, String.join(",", selectedAmenities));
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Error processing booking.");
+                    return;
                 }
 
-                else {
-                    Customer customer = new Customer(nameField.getText(), creditCardField.getText(), phoneNumberField.getText(), true);
-                    Database.insertCustomer(customer.getName(), customer.getCardNumber(), customer.getPhoneNumber(), customer.getLoyaltyMember());
-
-
-                    HashSet<String> listOfChosenAmenities = new HashSet<>();
-
-                    if (spaCheckbox.isSelected()){
-                        listOfChosenAmenities.add("Spa");
-                    }
-                    if (parkingCheckbox.isSelected()){
-                        listOfChosenAmenities.add("Parking");
-                    }
-                    if (mealCardCheckbox.isSelected()){
-                        listOfChosenAmenities.add("MealCard");
-                    }
-                    if (breakfastCheckbox.isSelected()){
-                        listOfChosenAmenities.add("Breakfast");
-                    }
-
-                    System.out.println("Room:" + roomNumber + "Has Been Booked.");
-                    try {
-                        Database.insertBooking(nameField.getText(), roomNumber, checkInDate, checkOutDate, String.join(",", listOfChosenAmenities));
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    JOptionPane.showMessageDialog(null, "Thank You For Your Purchase");
-                    dispose();
-                }
-
-
+                JOptionPane.showMessageDialog(this, "Thank you for your booking!");
+                dispose();
             }
         });
-        add(customerInfoPanel);
     }
 }
-

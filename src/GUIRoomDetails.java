@@ -17,7 +17,7 @@ public class GUIRoomDetails extends JFrame {
         // Initialize Components
         setTitle("Room Details");
         setContentPane(panel);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(810, 750);
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding
         setLocationRelativeTo(null);

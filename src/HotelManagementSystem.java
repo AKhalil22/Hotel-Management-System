@@ -83,7 +83,7 @@ public class HotelManagementSystem {
             @Override
             public void run() {
                 new GUILoginPage(availableRooms).setVisible(true);
-                new GUIAdminRooms().setVisible(true);
+//                new GUIAdminRooms().setVisible(true);
             }
         });
 

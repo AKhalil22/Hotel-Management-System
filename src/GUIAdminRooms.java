@@ -23,7 +23,7 @@ public class GUIAdminRooms extends JFrame  {
         this.setContentPane(panel);
         this.pack();
         this.setVisible(true);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // Populate table in accordance with customerBookings layout
         this.populateTable();
