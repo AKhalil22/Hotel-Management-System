@@ -82,16 +82,8 @@ public class HotelManagementSystem {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                //GUIAdminRooms adminRooms = new GUIAdminRooms();
                 new GUILoginPage(availableRooms).setVisible(true);
-                // new GuestHomePageGUI(availableRooms).setVisible(true);
-//                new GUIAdminPage().setVisible(true);
-
-//                try {
-//                    new GUIWaitlist(waitList);
-//                } catch (SQLException e) {
-//                    throw new RuntimeException(e);
-//                }
+                new GUIAdminRooms().setVisible(true);
             }
         });
 

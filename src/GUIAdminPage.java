@@ -157,7 +157,6 @@ public class GUIAdminPage extends JFrame {
         return panel;
     }
 
-
 }
 
 /*

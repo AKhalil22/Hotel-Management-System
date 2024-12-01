@@ -233,20 +233,19 @@ public class Database {
             while (resultSet.next()) {
                 // Create Room during runtime
                 Room room = new Room(resultSet.getInt("room_number"), resultSet.getString("room_type"), resultSet.getDouble("room_price"), resultSet.getBoolean("is_available"));
-                // Insert to room tree data structure
-                // TODO: HotelManagementSystem.roomTree.insert(HotelManagementSystem.roomTree.root, Integer.parseInt("room_number"));
+
+                // Insert to room into Binary Search Tree
+                HotelManagementSystem.roomTree.insert(HotelManagementSystem.roomTree.root, room.getRoomNumber(), room.getRoomType(), room.getRoomPrice(), room.isAvailable());
+
                 // Insert to availableRooms ArrayList
                 if (room.isAvailable()) {
                     HotelManagementSystem.availableRooms.add(room);
                 }
-                // Insert to map data structure
-                // TODO: HotelManagementSystem.map.put(room, room.getRoomNumber());
             }
         } catch (SQLException e) {
             System.out.println("Viewing Room table failed: " + e.getMessage());
         }
     }
-
 
     // Load data structures utilizing customers
     public static void loadCustomerDataStructures() {
