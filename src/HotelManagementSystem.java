@@ -7,7 +7,7 @@ public class HotelManagementSystem {
     // Store customers O(1) Lookup (Time Complexity)
     // REMOVE: static ArrayList<Customer> customers = new ArrayList<>();
 
-    // Key-Value Pair | Key = Integer (Object) | Value = Price (Integer)
+    // Key-Value Pair | Key = Integer (Customer ID) | Value = Customer (Customer Object)
     static TreeMap<Integer, Customer> customersTreeMap = new TreeMap<>();
 
     // Wait-list for booked rooms, Priority will be given to member holders
