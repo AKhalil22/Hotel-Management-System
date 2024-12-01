@@ -23,7 +23,7 @@ public class RoomDetailsGUI extends JFrame {
         titleLabel.setForeground(Color.BLACK);
 
         // Load and scale the image
-        ImageIcon roomImageIcon = new ImageIcon("src/images/DefaultSuite.jpg"); // Replace with your image path (MAKE SURE THE IMAGE IS OF TYPE .jpg!)
+        ImageIcon roomImageIcon = new ImageIcon("src/images/DefaultSuite1.jpg"); // Replace with your image path (MAKE SURE THE IMAGE IS OF TYPE .jpg!)
         Image roomImage = roomImageIcon.getImage().getScaledInstance(roomImageIcon.getIconWidth(), roomImageIcon.getIconHeight(), Image.SCALE_SMOOTH);
 
         // Create the RoundedImagePanel

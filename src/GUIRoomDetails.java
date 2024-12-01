@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 
 public class GUIRoomDetails extends JFrame {
@@ -10,7 +12,7 @@ public class GUIRoomDetails extends JFrame {
     private JButton checkoutButton;
 
 
-    public GUIRoomDetails(int roomNumber, String roomImageName, String roomDetails) {
+    public GUIRoomDetails(int roomNumber, String roomImageName, String roomDetails, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
 
         // Initialize Components
         setTitle("Room Details");
@@ -40,8 +42,17 @@ public class GUIRoomDetails extends JFrame {
 
         // Proceed Button customization
         checkoutButton.setFont(new Font("Arial", Font.BOLD, 18));
+
+        // Checkout Button Clicked
+        checkoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new GUICheckOut(roomNumber, roomPrice, roomType, checkInDate, checkOutDate).setVisible(true);
+            }
+        });
     }
 
+    // Test Run
     public static void main(String[] args) {
 
         String roomDetails = """
@@ -54,6 +65,6 @@ public class GUIRoomDetails extends JFrame {
                 • Views: Large Windows Offering Panoramic Cityscapes Or Serene Garden Views.
                 """;
 
-        GUIRoomDetails main = new GUIRoomDetails(101, "DefaultSuite.jpg", roomDetails);
+        GUIRoomDetails main = new GUIRoomDetails(101, "DefaultSuite1.jpg", roomDetails, 300.00, "Suite", "2023-07-02", "2023-07-03");
     }
 }

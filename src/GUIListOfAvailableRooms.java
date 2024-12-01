@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class GUIListOfAvailableRooms extends JFrame {
@@ -99,6 +100,61 @@ public class GUIListOfAvailableRooms extends JFrame {
                 @Override
                 public void mouseClicked(MouseEvent e) {
 
+                    String roomImage = null;
+                    String roomDetails = null;
+
+                    // Choose random image
+                    Random random = new Random();
+                    int index = random.nextInt(2);
+
+                    if (roomType.equals("Suite")) {
+
+                        String[] defaultSuiteImages = {"DefaultSuite1.jpg", "DefaultSuite2.png"};
+                        roomImage = defaultSuiteImages[index];
+
+                        roomDetails = String.format("""
+                            Room %s Features:
+                        
+                            • Bedroom: A Plush King-Size Bed With Premium Linens For A Restful Night's Sleep.
+                            • Living Area: A Separate Living Space With Stylish Furnishings, Including A Cozy Sofa And A Dedicated Workspace.
+                            • Bathroom: An En-Suite Spa-Like Bathroom With A Deep Soaking Tub, Walk-In Rainfall Shower, And Luxurious Amenities.
+                            • Modern Amenities: High-Speed Wi-Fi, A Flat-Screen TV, Minibar, And Coffee Maker.
+                            • Views: Large Windows Offering Panoramic Cityscapes Or Serene Garden Views.
+                        """, room.getRoomNumber());
+
+                    } else if (roomType.equals("Double")) {
+
+                        String[] defaultDoubleImages = {"DefaultDouble1.jpg", "DefaultDouble2.png"};
+                        roomImage = defaultDoubleImages[index];
+
+                        roomDetails = String.format("""
+                            Room %s Features:
+                        
+                            • Bedroom: Two Plush Queen-Size Beds With Premium Linens For A Comfortable Stay.
+                            • Living Area: A Cozy Seating Area With Stylish Furnishings And A Functional Workspace.
+                            • Bathroom: A Spacious Bathroom Featuring A Walk-In Rainfall Shower And Complimentary Luxurious Amenities.
+                            • Modern Amenities: High-Speed Wi-Fi, A Flat-Screen TV, Minibar, And Coffee Maker.
+                            • Views: Expansive Windows Offering Cityscape Or Tranquil Garden Views.
+                        """, room.getRoomNumber());
+
+                    } else { // Room type is single
+
+                        String[] defaultSingleImages = {"DefaultSingle1.jpg", "DefaultSingle2.png"};
+                        roomImage = defaultSingleImages[index];
+
+                        roomDetails = String.format("""
+                            Room %s Features:
+                        
+                            • Bedroom: A Plush Twin-Size Bed With Premium Linens For A Restful Night.
+                            • Living Area: A Compact Yet Functional Space With A Comfortable Armchair And Small Work Desk.
+                            • Bathroom: A Well-Appointed Bathroom With A Walk-In Shower And Essential Amenities.
+                            • Modern Amenities: High-Speed Wi-Fi, A Flat-Screen TV, And A Coffee Maker.
+                            • Views: Large Window With Courtyard Or Garden Views For A Relaxing Ambiance.
+                        """, room.getRoomNumber());
+
+                    }
+
+                    new GUIRoomDetails(room.getRoomNumber(), roomImage, roomDetails, room.getRoomPrice(), room.getRoomType(), checkInDate, checkOutDate);
                 }
 
                 @Override
