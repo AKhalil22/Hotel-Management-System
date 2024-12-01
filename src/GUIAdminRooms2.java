@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class GUIAdminRooms extends JFrame  {
-    private JPanel panel;
+public class GUIAdminRooms2 extends JPanel {
     private JTable roomsTable;
     private JButton createNewRoomButton;
     private JButton RemoveRoomButton;
@@ -18,25 +17,33 @@ public class GUIAdminRooms extends JFrame  {
     private DefaultTableModel tableModel;
     private static List<Integer> listOfRooms;
 
-    public GUIAdminRooms() {
-        this.setTitle("Rooms");
-        this.setContentPane(panel);
-        this.pack();
-        this.setVisible(true);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    public GUIAdminRooms2() {
+        // Set up the layout for this panel
+        setLayout(new BorderLayout());
 
-        // Populate table in accordance with customerBookings layout
+        // Create and set up the table
         this.populateTable();
 
-        // Show GUI to create new room
+        // Add scroll pane with table
+        JScrollPane scrollPane = new JScrollPane(roomsTable);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // Create buttons panel
+        JPanel buttonsPanel = new JPanel();
+        createNewRoomButton = new JButton("Create New Room");
+        RemoveRoomButton = new JButton("Remove Room");
+        buttonsPanel.add(createNewRoomButton);
+        buttonsPanel.add(RemoveRoomButton);
+        add(buttonsPanel, BorderLayout.SOUTH);
+
+        // Set up event listeners for buttons
         createNewRoomButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUIAdminCreateRoom(GUIAdminRooms.this).setVisible(true);
+                new GUIAdminCreateRoom(GUIAdminRooms2.this).setVisible(true);
             }
         });
 
-        // Remove room
         RemoveRoomButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,7 +79,7 @@ public class GUIAdminRooms extends JFrame  {
         String[] columnNames = {"Room Number", "Room Type", "Room Price", "Is Available"};
         String[][] rowsOfData = {};
         tableModel = new DefaultTableModel(rowsOfData, columnNames);
-        this.roomsTable.setModel(tableModel);
+        roomsTable = new JTable(tableModel);
 
         BinarySearchTree roomTree = HotelManagementSystem.roomTree;
 
@@ -125,56 +132,4 @@ public class GUIAdminRooms extends JFrame  {
         int insertionIndex = findInsertionIndex(roomNumber);
         tableModel.insertRow(insertionIndex, new Object[]{roomNumber, roomType, roomPrice, isAvailable});
     }
-
-    //tree map to JTable method
-    private JPanel createCustomerTablePanel2() {
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
-
-        // Main heading label
-        JLabel customerTableLabel = new JLabel("<html><b>Customer Table 2</b></html>", SwingConstants.CENTER);
-        customerTableLabel.setFont(new Font("Dialog", Font.PLAIN, 24));
-        customerTableLabel.setBounds(300, 50, 400, 50);
-
-        //  column names
-        String[] columnNames = {"ID", "Name", "Card Number", "Phone Number", "Loyalty Member"};
-
-        // Convert TreeMap into 2D array
-        TreeMap<Integer, Customer> customersTreeMap = HotelManagementSystem.customersTreeMap;
-        Object[][] customerData = new Object[customersTreeMap.size()][5];
-
-        int rowIndex = 0;
-        for (Map.Entry<Integer, Customer> entry : customersTreeMap.entrySet()) {
-            Integer id = entry.getKey();
-            Customer customer = entry.getValue();
-
-            customerData[rowIndex][0] = id; // ID from TreeMap key
-            customerData[rowIndex][1] = customer.getName();
-            customerData[rowIndex][2] = customer.getCardNumber();
-            customerData[rowIndex][3] = customer.getPhoneNumber();
-            customerData[rowIndex][4] = customer.getLoyaltyMember() ? "Yes" : "No";
-
-            rowIndex++;
-        }
-
-        // Create JTable with customer data and make it non editable
-        JTable table = new JTable(new DefaultTableModel(customerData, columnNames) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        });
-
-
-        // Add scroll pane to JTable
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(150, 150, 700, 400);
-        panel.add(scrollPane);
-
-        panel.add(customerTableLabel);
-
-        return panel;
-    }
-
-
 }

@@ -9,9 +9,9 @@ public class GUIAdminCreateRoom extends JFrame {
     private JTextField roomPrice;
     private JCheckBox Availability;
     private JButton createAddRoomButton;
-    private GUIAdminRooms adminRooms; // Reference to GUIAdminRooms
+    private GUIAdminRooms2 adminRooms; // Reference to GUIAdminRooms
 
-    public GUIAdminCreateRoom(GUIAdminRooms adminRooms) {
+    public GUIAdminCreateRoom(GUIAdminRooms2 adminRooms) {
         // Initialize components
         this.setTitle("Create Room");
         this.setContentPane(panel);

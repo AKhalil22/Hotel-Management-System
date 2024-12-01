@@ -5,7 +5,7 @@ import java.util.*;
 public class HotelManagementSystem {
 
     // Store customers O(1) Lookup (Time Complexity)
-    static ArrayList<Customer> customers = new ArrayList<>();
+    // REMOVE: static ArrayList<Customer> customers = new ArrayList<>();
 
     // Key-Value Pair | Key = Integer (Object) | Value = Price (Integer)
     static TreeMap<Integer, Customer> customersTreeMap = new TreeMap<>();
@@ -22,7 +22,7 @@ public class HotelManagementSystem {
     public static void firstTimeRun() throws SQLException {
 
         // If customers list is empty & room tree is empty & bookings wait list is empty reinitialize the program
-        if (customers.isEmpty() && roomTree.root == null && waitList.isEmpty()) {
+        if (customersTreeMap.isEmpty() && roomTree.root == null && waitList.isEmpty()) {
             // Initialize default customers
             Customer Ammar = new Customer("AK", "1234567890123456","5163148991", Boolean.TRUE);
             Customer Raghav = new Customer("Raghav", "5372728473073497","5167375661", Boolean.TRUE);
@@ -83,7 +83,6 @@ public class HotelManagementSystem {
             @Override
             public void run() {
                 new GUILoginPage(availableRooms).setVisible(true);
-//                new GUIAdminRooms().setVisible(true);
             }
         });
 

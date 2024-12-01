@@ -2,7 +2,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.TreeMap;
@@ -60,16 +59,15 @@ public class GUIAdminPage extends JFrame {
         roomsTableLabel.setFont(new Font("Dialog", Font.PLAIN, 24));
         panel.add(roomsTableLabel, BorderLayout.NORTH);
 
-        GUIAdminRooms guiAdminRooms = new GUIAdminRooms();
+        GUIAdminRooms2 guiAdminRooms = new GUIAdminRooms2();
 
-        Component[] components = guiAdminRooms.getContentPane().getComponents();
-        for (Component component : components) {
-            panel.add(component, BorderLayout.CENTER);
-        }
+        // Embed the GUIAdminRooms2 panel into this tab
+        panel.add(guiAdminRooms, BorderLayout.CENTER);
 
         return panel;
     }
 
+    /*
     private JPanel createCustomerTablePanel() {
         JPanel panel = new JPanel();
         panel.setLayout(null);
@@ -108,6 +106,7 @@ public class GUIAdminPage extends JFrame {
 
         return panel;
     }
+     */
 
     //tree map to JTable method
     private JPanel createCustomerTablePanel2() {

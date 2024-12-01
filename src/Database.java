@@ -16,7 +16,6 @@ public class Database {
     public static void loadDataStructures() {
         loadRoomDataStructures();
         loadCustomerDataStructures();
-        //loadCustomerDataStructuresIntoTreeMap();
         System.out.println("All data structures loaded successfully.");
     }
 
@@ -87,7 +86,6 @@ public class Database {
             System.out.println("Inserting into Bookings table failed: " + e.getMessage());
         }
     }
-
 
     // Query/Get from bookings table
     public static void viewBookings() {
@@ -296,56 +294,6 @@ public class Database {
             System.out.println("Error loading customer data: " + e.getMessage());
         }
     }
-
-    /*
-    public static void loadCustomerDataStructuresIntoTreeMap() {
-        // SQL query to select all customers
-        String sqlCustomers = "SELECT id, name, card_number, phone_number, loyalty FROM customers;";
-        // SQL query to select all bookings
-        String sqlBookings = "SELECT customer_id, check_in_date, check_out_date FROM bookings;";
-
-        try (Connection connection = connect()) {
-            // Load all customers
-            Map<Integer, Customer> customerMap = new HashMap<>();
-            try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sqlCustomers)) {
-
-                while (resultSet.next()) {
-                    // Create Customer instance
-                    Customer customer = new Customer(
-                            resultSet.getString("name"),
-                            resultSet.getString("card_number"),
-                            resultSet.getString("phone_number"),
-                            resultSet.getBoolean("loyalty")
-                    );
-
-                    // Store in ArrayList and map for quick lookup
-                    int customerId = resultSet.getInt("id");
-                    HotelManagementSystem.customersTreeMap.put(customerId, customer);
-                    customerMap.put(resultSet.getInt("id"), customer);
-                }
-            }
-
-            // Load all bookings and match them with customers
-            try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sqlBookings)) {
-                while (resultSet.next()) {
-                    int customerId = resultSet.getInt("customer_id");
-                    Customer customer = customerMap.get(customerId);
-                    if (customer != null) {
-                        // Update customer with booking info
-                        customer.setStartDate(resultSet.getString("check_in_date"));
-                        customer.setEndDate(resultSet.getString("check_out_date"));
-
-                        // Add customer to waitList Priority Queue
-                        HotelManagementSystem.waitList.add(customer);
-                    }
-                }
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error loading customer data: " + e.getMessage());
-        }
-    }
-    */
 
     // Remove room from rooms table
     public static void removeRoom(Integer roomId) throws SQLException {
