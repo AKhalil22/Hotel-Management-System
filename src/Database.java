@@ -16,7 +16,7 @@ public class Database {
     public static void loadDataStructures() {
         loadRoomDataStructures();
         loadCustomerDataStructures();
-        loadCustomerDataStructuresIntoTreeMap();
+        //loadCustomerDataStructuresIntoTreeMap();
         System.out.println("All data structures loaded successfully.");
     }
 
@@ -233,20 +233,19 @@ public class Database {
             while (resultSet.next()) {
                 // Create Room during runtime
                 Room room = new Room(resultSet.getInt("room_number"), resultSet.getString("room_type"), resultSet.getDouble("room_price"), resultSet.getBoolean("is_available"));
-                // Insert to room tree data structure
-                // TODO: HotelManagementSystem.roomTree.insert(HotelManagementSystem.roomTree.root, Integer.parseInt("room_number"));
+
+                // Insert to room into Binary Search Tree
+                HotelManagementSystem.roomTree.insert(HotelManagementSystem.roomTree.root, room.getRoomNumber(), room.getRoomType(), room.getRoomPrice(), room.isAvailable());
+
                 // Insert to availableRooms ArrayList
                 if (room.isAvailable()) {
                     HotelManagementSystem.availableRooms.add(room);
                 }
-                // Insert to map data structure
-                // TODO: HotelManagementSystem.map.put(room, room.getRoomNumber());
             }
         } catch (SQLException e) {
             System.out.println("Viewing Room table failed: " + e.getMessage());
         }
     }
-
 
     // Load data structures utilizing customers
     public static void loadCustomerDataStructures() {
@@ -256,8 +255,9 @@ public class Database {
         String sqlBookings = "SELECT customer_id, check_in_date, check_out_date FROM bookings;";
 
         try (Connection connection = connect()) {
-            // Load all customers
+            // Load all customers into HashMap
             Map<Integer, Customer> customerMap = new HashMap<>();
+
             try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sqlCustomers)) {
                 while (resultSet.next()) {
                     // Create Customer instance
@@ -268,9 +268,11 @@ public class Database {
                             resultSet.getBoolean("loyalty")
                     );
 
-                    // Store in ArrayList and map for quick lookup
-                    HotelManagementSystem.customers.add(customer);
+                    // Get customer ID and add customer to TreeMap & local HashMap
+                    int customerId = resultSet.getInt("id");
+                    HotelManagementSystem.customersTreeMap.put(customerId, customer);
                     customerMap.put(resultSet.getInt("id"), customer);
+
                 }
             }
 
@@ -295,6 +297,7 @@ public class Database {
         }
     }
 
+    /*
     public static void loadCustomerDataStructuresIntoTreeMap() {
         // SQL query to select all customers
         String sqlCustomers = "SELECT id, name, card_number, phone_number, loyalty FROM customers;";
@@ -342,6 +345,7 @@ public class Database {
             System.out.println("Error loading customer data: " + e.getMessage());
         }
     }
+    */
 
     // Remove room from rooms table
     public static void removeRoom(Integer roomId) throws SQLException {
@@ -427,6 +431,7 @@ public class Database {
         }
     }
 
+    // Update room availability after booking is accepted by admin
     public static void updateRoomAvailability(Integer roomNumber, boolean isAvailable) throws SQLException {
         String sql = "UPDATE rooms SET is_available = ? WHERE room_number = ?";
 
@@ -437,6 +442,7 @@ public class Database {
         }
     }
 
+    // Remove booking from bookings table if admin cancels
     public static void removeBooking(Integer customerId) throws SQLException {
         String sql = "DELETE FROM bookings WHERE customer_id = ?";
 
@@ -446,6 +452,7 @@ public class Database {
         }
     }
 
+    // Login Verification method for GUILoginPage
     public static boolean isValidUsername(String username) {
         String sql = "SELECT COUNT(*) AS count FROM customers WHERE name = ?";
 
@@ -459,7 +466,6 @@ public class Database {
         }
         return false;
     }
-
 
     // TODO: Optionally add delete methods
 

@@ -7,10 +7,8 @@ public class HotelManagementSystem {
     // Store customers O(1) Lookup (Time Complexity)
     static ArrayList<Customer> customers = new ArrayList<>();
 
+    // Key-Value Pair | Key = Integer (Object) | Value = Price (Integer)
     static TreeMap<Integer, Customer> customersTreeMap = new TreeMap<>();
-
-    // Key-Value Pair | Key = Room (Object) | Value = Price (Integer)
-    // TODO: static TreeMap<Room, Integer> map = new TreeMap<>();
 
     // Wait-list for booked rooms, Priority will be given to member holders
     static Queue<Customer> waitList = new PriorityQueue<>(Comparator.comparing(Customer::getLoyaltyMember).reversed());
@@ -84,16 +82,8 @@ public class HotelManagementSystem {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                GUIAdminRooms adminRooms = new GUIAdminRooms();
                 new GUILoginPage(availableRooms).setVisible(true);
-                // new GuestHomePageGUI(availableRooms).setVisible(true);
-//                new GUIAdminPage().setVisible(true);
-
-//                try {
-//                    new GUIWaitlist(waitList);
-//                } catch (SQLException e) {
-//                    throw new RuntimeException(e);
-//                }
+                new GUIAdminRooms().setVisible(true);
             }
         });
 
