@@ -16,7 +16,7 @@ public class Database {
     public static void loadDataStructures() {
         loadRoomDataStructures();
         loadCustomerDataStructures();
-        loadCustomerDataStructuresIntoTreeMap();
+        //loadCustomerDataStructuresIntoTreeMap();
         System.out.println("All data structures loaded successfully.");
     }
 
@@ -255,8 +255,9 @@ public class Database {
         String sqlBookings = "SELECT customer_id, check_in_date, check_out_date FROM bookings;";
 
         try (Connection connection = connect()) {
-            // Load all customers
+            // Load all customers into HashMap
             Map<Integer, Customer> customerMap = new HashMap<>();
+
             try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sqlCustomers)) {
                 while (resultSet.next()) {
                     // Create Customer instance
@@ -267,9 +268,11 @@ public class Database {
                             resultSet.getBoolean("loyalty")
                     );
 
-                    // Store in ArrayList and map for quick lookup
-                    HotelManagementSystem.customers.add(customer);
+                    // Get customer ID and add customer to TreeMap & local HashMap
+                    int customerId = resultSet.getInt("id");
+                    HotelManagementSystem.customersTreeMap.put(customerId, customer);
                     customerMap.put(resultSet.getInt("id"), customer);
+
                 }
             }
 
@@ -294,6 +297,7 @@ public class Database {
         }
     }
 
+    /*
     public static void loadCustomerDataStructuresIntoTreeMap() {
         // SQL query to select all customers
         String sqlCustomers = "SELECT id, name, card_number, phone_number, loyalty FROM customers;";
@@ -341,6 +345,7 @@ public class Database {
             System.out.println("Error loading customer data: " + e.getMessage());
         }
     }
+    */
 
     // Remove room from rooms table
     public static void removeRoom(Integer roomId) throws SQLException {
