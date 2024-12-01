@@ -138,7 +138,7 @@ public class GUIAdminPage extends JFrame {
             rowIndex++;
         }
 
-        // Create JTable with customer data and make it non editable
+        // Create JTable with customer data and make it non-editable
         JTable table = new JTable(new DefaultTableModel(customerData, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
