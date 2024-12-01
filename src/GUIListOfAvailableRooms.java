@@ -98,8 +98,7 @@ public class GUIListOfAvailableRooms extends JFrame {
             roomBox.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    GUIRoomInfo roomInfo = new GUIRoomInfo(room.getRoomNumber(), room.getRoomPrice(), roomType, checkInDate, checkOutDate);
-                    roomInfo.setVisible(true);
+
                 }
 
                 @Override

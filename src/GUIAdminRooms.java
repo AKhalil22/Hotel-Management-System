@@ -1,10 +1,13 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class GUIAdminRooms extends JFrame  {
     private JPanel panel;
@@ -121,6 +124,56 @@ public class GUIAdminRooms extends JFrame  {
     public void addNewRoomToTable(int roomNumber, String roomType, double roomPrice, boolean isAvailable) {
         int insertionIndex = findInsertionIndex(roomNumber);
         tableModel.insertRow(insertionIndex, new Object[]{roomNumber, roomType, roomPrice, isAvailable});
+    }
+
+    //tree map to JTable method
+    private JPanel createCustomerTablePanel2() {
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+
+        // Main heading label
+        JLabel customerTableLabel = new JLabel("<html><b>Customer Table 2</b></html>", SwingConstants.CENTER);
+        customerTableLabel.setFont(new Font("Dialog", Font.PLAIN, 24));
+        customerTableLabel.setBounds(300, 50, 400, 50);
+
+        //  column names
+        String[] columnNames = {"ID", "Name", "Card Number", "Phone Number", "Loyalty Member"};
+
+        // Convert TreeMap into 2D array
+        TreeMap<Integer, Customer> customersTreeMap = HotelManagementSystem.customersTreeMap;
+        Object[][] customerData = new Object[customersTreeMap.size()][5];
+
+        int rowIndex = 0;
+        for (Map.Entry<Integer, Customer> entry : customersTreeMap.entrySet()) {
+            Integer id = entry.getKey();
+            Customer customer = entry.getValue();
+
+            customerData[rowIndex][0] = id; // ID from TreeMap key
+            customerData[rowIndex][1] = customer.getName();
+            customerData[rowIndex][2] = customer.getCardNumber();
+            customerData[rowIndex][3] = customer.getPhoneNumber();
+            customerData[rowIndex][4] = customer.getLoyaltyMember() ? "Yes" : "No";
+
+            rowIndex++;
+        }
+
+        // Create JTable with customer data and make it non editable
+        JTable table = new JTable(new DefaultTableModel(customerData, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
+
+
+        // Add scroll pane to JTable
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(150, 150, 700, 400);
+        panel.add(scrollPane);
+
+        panel.add(customerTableLabel);
+
+        return panel;
     }
 
 

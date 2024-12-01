@@ -7,6 +7,8 @@ public class HotelManagementSystem {
     // Store customers O(1) Lookup (Time Complexity)
     static ArrayList<Customer> customers = new ArrayList<>();
 
+    static TreeMap<Integer, Customer> customersTreeMap = new TreeMap<>();
+
     // Key-Value Pair | Key = Room (Object) | Value = Price (Integer)
     // TODO: static TreeMap<Room, Integer> map = new TreeMap<>();
 

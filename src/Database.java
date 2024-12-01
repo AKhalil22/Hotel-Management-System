@@ -16,6 +16,7 @@ public class Database {
     public static void loadDataStructures() {
         loadRoomDataStructures();
         loadCustomerDataStructures();
+        loadCustomerDataStructuresIntoTreeMap();
         System.out.println("All data structures loaded successfully.");
     }
 
@@ -86,6 +87,7 @@ public class Database {
             System.out.println("Inserting into Bookings table failed: " + e.getMessage());
         }
     }
+
 
     // Query/Get from bookings table
     public static void viewBookings() {
@@ -229,17 +231,14 @@ public class Database {
 
         try (Connection connection = connect(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
-                // Recreate Room during runtime
+                // Create Room during runtime
                 Room room = new Room(resultSet.getInt("room_number"), resultSet.getString("room_type"), resultSet.getDouble("room_price"), resultSet.getBoolean("is_available"));
-
-                // Insert to room into Binary Search Tree
-                HotelManagementSystem.roomTree.insert(HotelManagementSystem.roomTree.root, room.getRoomNumber(), room.getRoomType(), room.getRoomPrice(), room.isAvailable());
-
+                // Insert to room tree data structure
+                // TODO: HotelManagementSystem.roomTree.insert(HotelManagementSystem.roomTree.root, Integer.parseInt("room_number"));
                 // Insert to availableRooms ArrayList
                 if (room.isAvailable()) {
                     HotelManagementSystem.availableRooms.add(room);
                 }
-
                 // Insert to map data structure
                 // TODO: HotelManagementSystem.map.put(room, room.getRoomNumber());
             }
@@ -247,6 +246,7 @@ public class Database {
             System.out.println("Viewing Room table failed: " + e.getMessage());
         }
     }
+
 
     // Load data structures utilizing customers
     public static void loadCustomerDataStructures() {
@@ -260,7 +260,7 @@ public class Database {
             Map<Integer, Customer> customerMap = new HashMap<>();
             try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sqlCustomers)) {
                 while (resultSet.next()) {
-                    // Recreate Customer during Runtime
+                    // Create Customer instance
                     Customer customer = new Customer(
                             resultSet.getString("name"),
                             resultSet.getString("card_number"),
@@ -292,6 +292,64 @@ public class Database {
 
         } catch (SQLException e) {
             System.out.println("Error loading customer data: " + e.getMessage());
+        }
+    }
+
+    public static void loadCustomerDataStructuresIntoTreeMap() {
+        // SQL query to select all customers
+        String sqlCustomers = "SELECT id, name, card_number, phone_number, loyalty FROM customers;";
+        // SQL query to select all bookings
+        String sqlBookings = "SELECT customer_id, check_in_date, check_out_date FROM bookings;";
+
+        try (Connection connection = connect()) {
+            // Load all customers
+            Map<Integer, Customer> customerMap = new HashMap<>();
+            try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sqlCustomers)) {
+
+                while (resultSet.next()) {
+                    // Create Customer instance
+                    Customer customer = new Customer(
+                            resultSet.getString("name"),
+                            resultSet.getString("card_number"),
+                            resultSet.getString("phone_number"),
+                            resultSet.getBoolean("loyalty")
+                    );
+
+                    // Store in ArrayList and map for quick lookup
+                    int customerId = resultSet.getInt("id");
+                    HotelManagementSystem.customersTreeMap.put(customerId, customer);
+                    customerMap.put(resultSet.getInt("id"), customer);
+                }
+            }
+
+            // Load all bookings and match them with customers
+            try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sqlBookings)) {
+                while (resultSet.next()) {
+                    int customerId = resultSet.getInt("customer_id");
+                    Customer customer = customerMap.get(customerId);
+                    if (customer != null) {
+                        // Update customer with booking info
+                        customer.setStartDate(resultSet.getString("check_in_date"));
+                        customer.setEndDate(resultSet.getString("check_out_date"));
+
+                        // Add customer to waitList Priority Queue
+                        HotelManagementSystem.waitList.add(customer);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error loading customer data: " + e.getMessage());
+        }
+    }
+
+    // Remove room from rooms table
+    public static void removeRoom(Integer roomId) throws SQLException {
+        String sql = "DELETE FROM rooms WHERE id = ?";
+
+        try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
+            preStatement.setInt(1, roomId);
+            preStatement.executeUpdate();
         }
     }
 
@@ -336,40 +394,39 @@ public class Database {
 
     // Return booked room number from customer ID via bookings table
     public static int getRoomNumber(Integer customerId) throws SQLException {
-    String sql = "SELECT room_id FROM bookings WHERE customer_id = ?";
+        String sql = "SELECT room_id FROM bookings WHERE customer_id = ?";
 
-    try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
-        preStatement.setInt(1, customerId);
+        try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
+            preStatement.setInt(1, customerId);
 
-        try (ResultSet resultSet = preStatement.executeQuery()) {
-            if (resultSet.next()) {
-                int roomId = resultSet.getInt("room_id");
-                return getRoomNumberFromRoomTable(roomId);
-            } else {
-                throw new SQLException("No booking found for customer ID " + customerId);
+            try (ResultSet resultSet = preStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    int roomId = resultSet.getInt("room_id");
+                    return getRoomNumberFromRoomTable(roomId);
+                } else {
+                    throw new SQLException("No booking found for customer ID " + customerId);
+                }
             }
         }
     }
-}
 
     // Helper method to get the room number from the room table
     private static int getRoomNumberFromRoomTable(int roomId) throws SQLException {
-    String sql = "SELECT room_number FROM rooms WHERE id = ?";
+        String sql = "SELECT room_number FROM rooms WHERE id = ?";
 
-    try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
-        preStatement.setInt(1, roomId);
+        try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
+            preStatement.setInt(1, roomId);
 
-        try (ResultSet resultSet = preStatement.executeQuery()) {
-            if (resultSet.next()) {
-                return resultSet.getInt("room_number");
-            } else {
-                throw new SQLException("No room found with ID " + roomId);
+            try (ResultSet resultSet = preStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("room_number");
+                } else {
+                    throw new SQLException("No room found with ID " + roomId);
+                }
             }
         }
     }
-}
 
-    // Update room availability after booking is accepted by admin
     public static void updateRoomAvailability(Integer roomNumber, boolean isAvailable) throws SQLException {
         String sql = "UPDATE rooms SET is_available = ? WHERE room_number = ?";
 
@@ -380,7 +437,6 @@ public class Database {
         }
     }
 
-    // Remove booking from bookings table if admin cancels
     public static void removeBooking(Integer customerId) throws SQLException {
         String sql = "DELETE FROM bookings WHERE customer_id = ?";
 
@@ -390,17 +446,6 @@ public class Database {
         }
     }
 
-    // Remove room from rooms table
-    public static void removeRoom(Integer roomId) throws SQLException {
-        String sql = "DELETE FROM rooms WHERE id = ?";
-
-        try (Connection connection = connect(); PreparedStatement preStatement = connection.prepareStatement(sql)) {
-            preStatement.setInt(1, roomId);
-            preStatement.executeUpdate();
-        }
-    }
-
-    // Login Verification method for GUILoginPage
     public static boolean isValidUsername(String username) {
         String sql = "SELECT COUNT(*) AS count FROM customers WHERE name = ?";
 
@@ -414,5 +459,8 @@ public class Database {
         }
         return false;
     }
+
+
+    // TODO: Optionally add delete methods
 
 }
