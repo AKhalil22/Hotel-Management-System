@@ -426,6 +426,7 @@ public class Database {
         }
     }
 
+    // Update room availability after booking is accepted by admin
     public static void updateRoomAvailability(Integer roomNumber, boolean isAvailable) throws SQLException {
         String sql = "UPDATE rooms SET is_available = ? WHERE room_number = ?";
 
@@ -436,6 +437,7 @@ public class Database {
         }
     }
 
+    // Remove booking from bookings table if admin cancels
     public static void removeBooking(Integer customerId) throws SQLException {
         String sql = "DELETE FROM bookings WHERE customer_id = ?";
 
@@ -445,6 +447,7 @@ public class Database {
         }
     }
 
+    // Login Verification method for GUILoginPage
     public static boolean isValidUsername(String username) {
         String sql = "SELECT COUNT(*) AS count FROM customers WHERE name = ?";
 
@@ -458,7 +461,6 @@ public class Database {
         }
         return false;
     }
-
 
     // TODO: Optionally add delete methods
 
