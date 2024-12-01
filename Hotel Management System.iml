@@ -17,5 +17,14 @@
       </library>
     </orderEntry>
     <orderEntry type="library" exported="" name="xerial.sqlite.jdbc" level="project" />
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Downloads/flatlaf-3.5.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
