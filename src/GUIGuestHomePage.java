@@ -47,13 +47,11 @@ public class GUIGuestHomePage extends JFrame {
         checkInLabel.setBounds(30, 250, 400, 50);
         add(checkInLabel);
 
-
         //Check In Calendar
         JDatePanelImpl checkInDatePanel = new JDatePanelImpl(checkInModel, properties);
         JDatePickerImpl checkInDatePicker = new JDatePickerImpl(checkInDatePanel, new DateLabelFormatter());
         checkInDatePicker.setBounds(30, 300, 200, 30);
         add(checkInDatePicker);
-
 
         //Check Out Label
         JLabel checkOutLabel = new JLabel("<html><b>Check Out Date</b></html>");
