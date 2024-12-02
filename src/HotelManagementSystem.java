@@ -62,6 +62,9 @@ public class HotelManagementSystem {
             Database.insertBooking(Raghav.getName(), room2.getRoomNumber(), "2022-01-01", "2022-01-03", "Pool, Gym");
             Database.insertBooking(Hasan.getName(), room3.getRoomNumber(), "2022-01-01", "2022-01-03", "Pool, Gym");
             Database.insertBooking(Ayush.getName(), room4.getRoomNumber(), "2022-01-01", "2022-01-03", "Pool, Gym");
+
+            System.out.println("First time run successful! Please restart the program.");
+            JOptionPane.showMessageDialog(null, "First time run successful! Please restart the program.");
         }
     }
 
