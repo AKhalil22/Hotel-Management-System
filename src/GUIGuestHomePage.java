@@ -27,7 +27,7 @@ public class GUIGuestHomePage extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        String hotelImage = null;
+        String hotelImage;
         Random random = new Random();
         int index = random.nextInt(2);
         String[] defaultHotelImages = {"CityscapeHotel.gif", "WaterViewHotel.gif"};
@@ -198,6 +198,7 @@ public class GUIGuestHomePage extends JFrame {
         });
 
     }
+
 
     //method to get the type of room wanted
     public String getRoomTypeWanted(JComboBox<String> typeOfRoomComboBox){
