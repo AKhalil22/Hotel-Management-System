@@ -115,11 +115,11 @@ public class GUIListOfAvailableRooms extends JFrame {
                         roomDetails = String.format("""
                             Room %s Features:
                         
-                            • Bedroom: A Plush King-Size Bed With Premium Linens For A Restful Night's Sleep.
-                            • Living Area: A Separate Living Space With Stylish Furnishings, Including A Cozy Sofa And A Dedicated Workspace.
-                            • Bathroom: An En-Suite Spa-Like Bathroom With A Deep Soaking Tub, Walk-In Rainfall Shower, And Luxurious Amenities.
-                            • Modern Amenities: High-Speed Wi-Fi, A Flat-Screen TV, Minibar, And Coffee Maker.
-                            • Views: Large Windows Offering Panoramic Cityscapes Or Serene Garden Views.
+                            - Bedroom: A Plush King-Size Bed With Premium Linens For A Restful Night's Sleep.
+                            - Living Area: A Separate Living Space With Stylish Furnishings, Including A Cozy Sofa And A Dedicated Workspace.
+                            - Bathroom: An En-Suite Spa-Like Bathroom With A Deep Soaking Tub, Walk-In Rainfall Shower, And Luxurious Amenities.
+                            - Modern Amenities: High-Speed Wi-Fi, A Flat-Screen TV, Minibar, And Coffee Maker.
+                            - Views: Large Windows Offering Panoramic Cityscapes Or Serene Garden Views.
                         """, room.getRoomNumber());
 
                     } else if (roomType.equals("Double")) {
@@ -130,11 +130,11 @@ public class GUIListOfAvailableRooms extends JFrame {
                         roomDetails = String.format("""
                             Room %s Features:
                         
-                            • Bedroom: Two Plush Queen-Size Beds With Premium Linens For A Comfortable Stay.
-                            • Living Area: A Cozy Seating Area With Stylish Furnishings And A Functional Workspace.
-                            • Bathroom: A Spacious Bathroom Featuring A Walk-In Rainfall Shower And Complimentary Luxurious Amenities.
-                            • Modern Amenities: High-Speed Wi-Fi, A Flat-Screen TV, Minibar, And Coffee Maker.
-                            • Views: Expansive Windows Offering Cityscape Or Tranquil Garden Views.
+                            - Bedroom: Two Plush Queen-Size Beds With Premium Linens For A Comfortable Stay.
+                            - Living Area: A Cozy Seating Area With Stylish Furnishings And A Functional Workspace.
+                            - Bathroom: A Spacious Bathroom Featuring A Walk-In Rainfall Shower And Complimentary Luxurious Amenities.
+                            - Modern Amenities: High-Speed Wi-Fi, A Flat-Screen TV, Minibar, And Coffee Maker.
+                            - Views: Expansive Windows Offering Cityscape Or Tranquil Garden Views.
                         """, room.getRoomNumber());
 
                     } else { // Room type is single
@@ -145,11 +145,11 @@ public class GUIListOfAvailableRooms extends JFrame {
                         roomDetails = String.format("""
                             Room %s Features:
                         
-                            • Bedroom: A Plush Twin-Size Bed With Premium Linens For A Restful Night.
-                            • Living Area: A Compact Yet Functional Space With A Comfortable Armchair And Small Work Desk.
-                            • Bathroom: A Well-Appointed Bathroom With A Walk-In Shower And Essential Amenities.
-                            • Modern Amenities: High-Speed Wi-Fi, A Flat-Screen TV, And A Coffee Maker.
-                            • Views: Large Window With Courtyard Or Garden Views For A Relaxing Ambiance.
+                            - Bedroom: A Plush Twin-Size Bed With Premium Linens For A Restful Night.
+                            - Living Area: A Compact Yet Functional Space With A Comfortable Armchair And Small Work Desk.
+                            - Bathroom: A Well-Appointed Bathroom With A Walk-In Shower And Essential Amenities.
+                            - Modern Amenities: High-Speed Wi-Fi, A Flat-Screen TV, And A Coffee Maker.
+                            - Views: Large Window With Courtyard Or Garden Views For A Relaxing Ambiance.
                         """, room.getRoomNumber());
 
                     }
