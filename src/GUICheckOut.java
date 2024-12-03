@@ -10,9 +10,9 @@ public class GUICheckOut extends JFrame {
     private double totalPrice;
     private JLabel totalPriceLabel;
 
-    public GUICheckOut(int roomNumber, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
+    public GUICheckOut(int roomNumber, double roomPrice, String roomType, String checkInDate, String checkOutDate, int stayDuration) {
         super("Checkout");
-        this.totalPrice = roomPrice;
+        this.totalPrice = roomPrice * stayDuration;
 
         // Frame setup
         setSize(800, 600);

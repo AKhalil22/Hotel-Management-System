@@ -12,7 +12,7 @@ public class GUIRoomDetails extends JFrame {
     private JButton checkoutButton;
 
 
-    public GUIRoomDetails(int roomNumber, String roomImageName, String roomDetails, double roomPrice, String roomType, String checkInDate, String checkOutDate) {
+    public GUIRoomDetails(int roomNumber, String roomImageName, String roomDetails, double roomPrice, String roomType, String checkInDate, String checkOutDate, int stayDuration) {
 
         // Initialize Components
         setTitle("Room Details");
@@ -47,7 +47,7 @@ public class GUIRoomDetails extends JFrame {
         checkoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUICheckOut(roomNumber, roomPrice, roomType, checkInDate, checkOutDate).setVisible(true);
+                new GUICheckOut(roomNumber, roomPrice, roomType, checkInDate, checkOutDate, stayDuration).setVisible(true);
             }
         });
     }
@@ -65,6 +65,6 @@ public class GUIRoomDetails extends JFrame {
                 • Views: Large Windows Offering Panoramic Cityscapes Or Serene Garden Views.
                 """;
 
-        GUIRoomDetails main = new GUIRoomDetails(101, "DefaultSuite1.jpg", roomDetails, 300.00, "Suite", "2023-07-02", "2023-07-03");
+        GUIRoomDetails main = new GUIRoomDetails(101, "DefaultSuite1.jpg", roomDetails, 300.00, "Suite", "2023-07-02", "2023-07-03", 1);
     }
 }

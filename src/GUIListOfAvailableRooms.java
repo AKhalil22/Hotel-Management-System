@@ -12,11 +12,12 @@ public class GUIListOfAvailableRooms extends JFrame {
     private final String roomType;
     private final String checkInDate;
     private final String checkOutDate;
+    private final int stayDuration;
     private final List<Room> availableRooms;
     private final JComboBox<String> roomTypeComboBox;
 
 
-    public GUIListOfAvailableRooms(List<Room> availableRooms, JComboBox<String> roomTypeComboBox, String roomType, String checkInDate, String checkOutDate) {
+    public GUIListOfAvailableRooms(List<Room> availableRooms, JComboBox<String> roomTypeComboBox, String roomType, String checkInDate, String checkOutDate, int stayDuration) {
         super("List of Available Rooms");
 
         this.availableRooms = availableRooms;
@@ -26,6 +27,7 @@ public class GUIListOfAvailableRooms extends JFrame {
         this.roomType = roomType;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
+        this.stayDuration = stayDuration;
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(1000, 800);
@@ -154,7 +156,7 @@ public class GUIListOfAvailableRooms extends JFrame {
 
                     }
 
-                    new GUIRoomDetails(room.getRoomNumber(), roomImage, roomDetails, room.getRoomPrice(), room.getRoomType(), checkInDate, checkOutDate);
+                    new GUIRoomDetails(room.getRoomNumber(), roomImage, roomDetails, room.getRoomPrice(), room.getRoomType(), checkInDate, checkOutDate, stayDuration);
                 }
 
                 @Override
