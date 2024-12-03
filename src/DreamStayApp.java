@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 
 public class DreamStayApp extends JFrame {
 
@@ -24,8 +25,14 @@ public class DreamStayApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        String hotelImage = null;
+        Random random = new Random();
+        int index = random.nextInt(2);
+        String[] defaultHotelImages = {"CityscapeHotel.gif", "WaterViewHotel.gif"};
+        hotelImage = defaultHotelImages[index];
+
         // Add custom background panel
-        BackgroundPanel backgroundPanel = new BackgroundPanel("src/images/WaterViewHotel.gif");
+        BackgroundPanel backgroundPanel = new BackgroundPanel("src/images/" + hotelImage);
         backgroundPanel.setLayout(new BorderLayout());
         add(backgroundPanel);
 
@@ -150,7 +157,6 @@ public class DreamStayApp extends JFrame {
         centerPanel.add(Box.createVerticalGlue()); // Spacer for dynamic centering
 
         // User clicks checkout Button
-        /*
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -173,30 +179,22 @@ public class DreamStayApp extends JFrame {
                 String roomType = getRoomTypeWanted(roomTypeBox); // Retrieve the selected room type
 
                 // Check if both dates are selected
-                if (checkInDate.isEmpty() || checkOutDate.isEmpty()) {
-                    JOptionPane.showMessageDialog(this,
-                            "Please select both check-in and check-out dates.", "Error", JOptionPane.ERROR_MESSAGE);
+                if (checkInDate.isEmpty() || checkOutDate.isEmpty() || roomType == "Room Type") {
+                    JOptionPane.showMessageDialog(DreamStayApp.this,
+                            "Please select both check-in and check-out dates or room type.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     // Pass additional parameters to ListOfAvailableRoomsGUI
                     dispose();
-                    new GUIListOfAvailableRooms(availableRooms, typeOfRoomComboBox, roomType, checkInDate, checkOutDate).setVisible(true);
+                    new GUIListOfAvailableRooms(availableRooms, roomTypeBox, roomType, checkInDate, checkOutDate).setVisible(true);
                 }
             }
         });
-         */
 
     }
 
     //method to get the type of room wanted
     public String getRoomTypeWanted(JComboBox<String> typeOfRoomComboBox){
-        String roomType = (String) typeOfRoomComboBox.getSelectedItem();
-        if (roomType == "Room Type") {
-            JOptionPane.showMessageDialog(this,
-                    "Please select a room type.", "Error", JOptionPane.ERROR_MESSAGE);
-            return null;
-        } else {
-            return roomType;
-        }
+        return (String) typeOfRoomComboBox.getSelectedItem();
     }
 
     public static void main(String[] args) {
