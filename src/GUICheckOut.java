@@ -1,10 +1,14 @@
+import org.jdatepicker.impl.JDatePickerImpl;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class GUICheckOut extends JFrame {
     private double totalPrice;
@@ -103,6 +107,7 @@ public class GUICheckOut extends JFrame {
         gbc.weighty = 0.2;
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(payButton, gbc);
+
 
         // Pay Button Action
         payButton.addActionListener(e -> {

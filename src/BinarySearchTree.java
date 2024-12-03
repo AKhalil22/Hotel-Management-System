@@ -129,4 +129,3 @@ public class BinarySearchTree {
 
 }
 
-// Credits: this code is a modified version of what was found on geeksforgeeks.com. I modified it to make it clearer.
