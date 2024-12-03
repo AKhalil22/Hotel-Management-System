@@ -4,9 +4,6 @@ import java.util.*;
 
 public class HotelManagementSystem {
 
-    // Store customers O(1) Lookup (Time Complexity)
-    // REMOVE: static ArrayList<Customer> customers = new ArrayList<>();
-
     // Key-Value Pair | Key = Integer (Customer ID) | Value = Customer (Customer Object)
     static TreeMap<Integer, Customer> customersTreeMap = new TreeMap<>();
 
@@ -28,12 +25,14 @@ public class HotelManagementSystem {
             Customer Raghav = new Customer("Raghav", "5372728473073497","5167375661", Boolean.TRUE);
             Customer Hasan = new Customer("Hasan", "5132643139485327","6318328991", Boolean.FALSE);
             Customer Ayush = new Customer("Ayush", "5467126324069671","6310320001", Boolean.FALSE);
+            Customer Robert = new Customer("Robert", "5467126324069671","6310320001", Boolean.TRUE);
 
             // Insert customers to database
             Database.insertCustomer(Ammar.getName(), Ammar.getCardNumber(), Ammar.getPhoneNumber(), Ammar.getLoyaltyMember());
             Database.insertCustomer(Raghav.getName(), Raghav.getCardNumber(), Raghav.getPhoneNumber(), Raghav.getLoyaltyMember());
             Database.insertCustomer(Hasan.getName(), Hasan.getCardNumber(), Hasan.getPhoneNumber(), Hasan.getLoyaltyMember());
             Database.insertCustomer(Ayush.getName(), Ayush.getCardNumber(), Ayush.getPhoneNumber(), Ayush.getLoyaltyMember());
+            Database.insertCustomer(Robert.getName(), Robert.getCardNumber(), Robert.getPhoneNumber(), Robert.getLoyaltyMember());
 
             // Initialize default rooms
             Room room1 = new Room(100, "Single", 100, true);
@@ -62,6 +61,7 @@ public class HotelManagementSystem {
             Database.insertBooking(Raghav.getName(), room2.getRoomNumber(), "2022-01-01", "2022-01-03", "Pool, Gym");
             Database.insertBooking(Hasan.getName(), room3.getRoomNumber(), "2022-01-01", "2022-01-03", "Pool, Gym");
             Database.insertBooking(Ayush.getName(), room4.getRoomNumber(), "2022-01-01", "2022-01-03", "Pool, Gym");
+            Database.insertBooking(Robert.getName(), room5.getRoomNumber(), "2022-01-01", "2022-01-03", "Pool, Gym");
 
             System.out.println("First time run successful! Please restart the program.");
             JOptionPane.showMessageDialog(null, "First time run successful! Please restart the program.");
