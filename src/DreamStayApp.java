@@ -4,11 +4,19 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Properties;
 
 public class DreamStayApp extends JFrame {
 
-    public DreamStayApp() {
+    private final List<Room> availableRooms;
+
+    public DreamStayApp(List<Room> availableRooms) {
+        this.availableRooms = availableRooms;
+
         // Set frame properties
         setTitle("Dream Stay");
         double scaleFactor = 1.3;
@@ -140,11 +148,60 @@ public class DreamStayApp extends JFrame {
         // Add labeled form to center panel
         centerPanel.add(labeledForm);
         centerPanel.add(Box.createVerticalGlue()); // Spacer for dynamic centering
+
+        // User clicks checkout Button
+        /*
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Get Check-In Date
+                Object checkInDateObj = checkInDatePicker.getModel().getValue();
+                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+                String checkInDate = "";
+                if (checkInDateObj != null) {
+                    checkInDate = sdf.format(checkInDateObj); // Check-in date stored in this variable
+                }
+
+                // Get Check-Out Date
+                Object checkOutDateObj = checkOutDatePicker.getModel().getValue();
+                String checkOutDate = "";
+                if (checkOutDateObj != null) {
+                    checkOutDate = sdf.format(checkOutDateObj); // Check-out date stored in this variable
+                }
+
+                // Get Room Type
+                String roomType = getRoomTypeWanted(roomTypeBox); // Retrieve the selected room type
+
+                // Check if both dates are selected
+                if (checkInDate.isEmpty() || checkOutDate.isEmpty()) {
+                    JOptionPane.showMessageDialog(this,
+                            "Please select both check-in and check-out dates.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    // Pass additional parameters to ListOfAvailableRoomsGUI
+                    dispose();
+                    new GUIListOfAvailableRooms(availableRooms, typeOfRoomComboBox, roomType, checkInDate, checkOutDate).setVisible(true);
+                }
+            }
+        });
+         */
+
+    }
+
+    //method to get the type of room wanted
+    public String getRoomTypeWanted(JComboBox<String> typeOfRoomComboBox){
+        String roomType = (String) typeOfRoomComboBox.getSelectedItem();
+        if (roomType == "Room Type") {
+            JOptionPane.showMessageDialog(this,
+                    "Please select a room type.", "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        } else {
+            return roomType;
+        }
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            DreamStayApp app = new DreamStayApp();
+            DreamStayApp app = new DreamStayApp(HotelManagementSystem.availableRooms);
             app.setVisible(true);
         });
     }
